@@ -1,0 +1,96 @@
+// HEADER
+
+.header-logo{
+  font-size: 172px;
+  color: $simple-pink;
+}
+
+header {
+  position: relative;
+  top: 37px;
+  height: 40px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#search {
+  border-radius: 15px;
+  background-color: $section-bg;
+  outline: none;
+  border: none;
+  width: 480px;
+  height: 40px;
+  padding: 13px;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: $white;
+}
+
+.header__left-side {
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  flex: 0 1 240px;
+}
+
+.header__left-side-btn {
+  background-color: $base-color;
+  outline: none;
+  border: none;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1%;
+    height: 2px;
+    background-color: $simple-pink;
+    opacity: 0;
+    transition: 0.4s ease-in-out;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    &:after {
+      top: 100%;
+      width: 100%;
+      opacity: 50%;
+    }
+  }
+}
+
+.language {
+  gap: 14px;
+  margin-right: 58px;
+
+  &-text {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: $white;
+  }
+}
+
+.too_much {
+  position: relative;
+  top: 9px;
+  width: 64px;
+}

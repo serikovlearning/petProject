@@ -1,0 +1,94 @@
+// NAVIGATION
+
+nav {
+  position: fixed;
+  top: 20px;
+  left: 120px;
+  background-color: $base-color;
+  border: 1px solid $second-color;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000;
+}
+
+.logo {
+  margin-bottom: 45px;
+  width: 46px;
+  height: 46px;
+}
+
+.menu__item {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  width: 46px;
+  text-align: center;
+  transition: 0.4s ease-in-out;
+
+  &:not(:last-child) {
+    margin-bottom: 27px;
+  }
+
+  &:hover h1, &:hover .nav-icon{
+    color: $simple-pink;
+  }
+
+  & div {
+    width: 46px;
+    background-color: $second-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 46px;
+    border-radius: 5px;
+
+
+    & span{
+      width: 20px;
+      height: 20px;
+    }
+
+
+  }
+
+  &-title {
+    margin-top: 4px;
+    color: $dop-color;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.4s ease-in-out;
+
+    &.active {
+      color: $white;
+    }
+  }
+}
+
+ion-icon{
+  font-size: 34px;
+  color:$dop-color;
+  transition: 0.4s ease-in-out;
+}
+ion-icon.active{
+  color: $white;
+}
+
+.nav-logo{
+  font-size: 50px;
+  color: $dop-color;
+
+  &:hover{
+    color: $simple-pink;
+
+  }
+}
