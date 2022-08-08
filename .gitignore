@@ -1,10 +1,12 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+.idea
+.gitignore
+style.scss
 # Editor-based HTTP Client requests
 /httpRequests/
 /scss/
 learningApp.js
 Untitled.fig
 style.css
-style.scss
