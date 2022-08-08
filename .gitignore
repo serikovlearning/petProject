@@ -1,0 +1,10 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+/scss/
+learningApp.js
+Untitled.fig
+style.css
+style.scss
