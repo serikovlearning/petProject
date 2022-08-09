@@ -10,7 +10,6 @@
 body {
   font-family: 'Montserrat', sans-serif;
   background-color: $base-color;
-  position: relative;
 
 }
 
@@ -19,12 +18,15 @@ body {
   margin: 0 auto;
 }
 
+
 .main-content {
   width: 100%;
   overflow: hidden;
 
   & > main {
     transition: 1s ease-in-out;
-
   }
+}
+
+.account-content {
 }

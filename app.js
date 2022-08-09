@@ -4,7 +4,8 @@ const controlItems = document.querySelectorAll('.controls-item'),
     menuItems = document.querySelectorAll('.menu__item'),
     mainContent = document.querySelector('.main-content > main'),
     navLogo = document.querySelector('.logo'),
-    accountContent = document.querySelector('.account-content > main')
+    accountContent = document.querySelector('.account-content > main'),
+    contentSections = document.querySelectorAll('.content__wrapper > section')
 
 
 function createCardNode(cardData) {
@@ -82,24 +83,21 @@ function getData(url) {
 
 menuItems.forEach((item, index) => {
     item.addEventListener('click', () => {
-        mainContent.style.transform = `translateX(100%)`
-        // window.scrollTo({
-        //     top: 1500,
-        //     left: 0,
-        //     behavior: 'smooth'
-        // })
+
+        contentSections[0].style.transform = `translateX(100%)`
         setTimeout(() => {
             // mainContent.style.display = 'none'
         }, 1000)
         if (index === 0) {
-            console.log('works')
-            accountContent.parentNode.style.left = '0%'
+            contentSections[1].style.transform = `translateX(-100%)`
+            item.classList.add('active')
         }
     })
 })
 
 navLogo.addEventListener('click', () => {
-    mainContent.style.transform = `translateX(0) `
+    contentSections[0].style.transform = `translateX(0)`
+    contentSections[1].style.transform = `translateX(-200%)`
 })
 
 function getRandomArbitrary(min, max) {

@@ -9,7 +9,6 @@
 body {
   font-family: "Montserrat", sans-serif;
   background-color: #1F354C;
-  position: relative;
 }
 
 .container {
@@ -352,7 +351,7 @@ header {
 }
 
 .user__path {
-  margin-top: 75px;
+  margin-top: 50px;
   width: 100%;
   display: flex;
   background-color: #0F2133;
@@ -411,6 +410,24 @@ header {
 #myChart {
   padding: 0px 30px 30px 0;
   width: 50%;
+}
+
+.content__wrapper {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+}
+.content__wrapper > section {
+  flex: 1 0 100%;
+  transition: 1s ease-in-out;
+}
+.content__wrapper .account-content {
+  transform: translateX(-200%);
+}
+
+.menu__item.active h1, .menu__item.active > div > .nav-icon {
+  color: white;
 }
 
 /*# sourceMappingURL=style.css.map */
