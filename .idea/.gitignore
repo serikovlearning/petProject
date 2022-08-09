@@ -3,3 +3,9 @@
 /workspace.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+./scss/
+./learningApp.js
+./style.scss
+./style.css.map
+./Untitled.fig
+./.idea
