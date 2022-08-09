@@ -83,14 +83,35 @@ getData(requestUrl)
 
 menuItems.forEach((item, index) => {
     item.addEventListener('click', () => {
+        item.classList.add('active')
+        for (let i = 0; i < menuItems.length; i++) {
+            if (i !== index) {
+                menuItems[i].classList.remove('active')
+            }
+        }
+
 
         contentSections[0].style.transform = `translateX(100%)`
-        setTimeout(() => {
-            // mainContent.style.display = 'none'
-        }, 1000)
         if (index === 0) {
             contentSections[1].style.transform = `translateX(-100%)`
-            item.classList.add('active')
+        }
+    })
+})
+
+controlItems.forEach((item, i) => {
+    let currentItem;
+
+    item.addEventListener('click', () => {
+        currentItem = item
+        currentItem.classList.add('active')
+        cardsTitle.innerHTML = currentItem.innerHTML
+
+        // drawCards(i)
+
+        for (let x = 0; x < controlItems.length; x++) {
+            if (x !== i) {
+                controlItems[x].classList.remove('active')
+            }
         }
     })
 })
@@ -98,6 +119,9 @@ menuItems.forEach((item, index) => {
 navLogo.addEventListener('click', () => {
     contentSections[0].style.transform = `translateX(0)`
     contentSections[1].style.transform = `translateX(-200%)`
+    menuItems.forEach(item => {
+        item.classList.remove('active')
+    })
 })
 
 function getRandomArbitrary(min, max) {
