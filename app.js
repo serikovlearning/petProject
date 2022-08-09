@@ -37,7 +37,7 @@ function createCardNode(cardData) {
     return card
 }
 
-// const requestUrl = 'https://jsonplaceholder.typicode.com/posts'
+const requestUrl = 'https://jsonplaceholder.typicode.com/posts'
 
 function getData(url) {
     return fetch(url)
@@ -48,37 +48,37 @@ function getData(url) {
         })
 }
 
-// getData(requestUrl)
-//     .then(data => {
-//         let resultObject,
-//             resultArr = [];
-//         setTimeout(() => {
-//             for (let item of data) {
-//                 resultObject = {
-//                     userId: item.userId,
-//                     postId: item.id,
-//                     title: item.title.slice(0, 15),
-//                     text: item.body.slice(0, 30)
-//                 }
-//                 resultArr.push(resultObject)
-//             }
-//
-//         }, 1000)
-//         return new Promise((resolve, reject) => {
-//             setTimeout(() => {
-//                 resolve(resultArr)
-//             }, 2000)
-//         })
-//     }).then(newData => {
-//     let counter = 10;
-//     for (let object of newData) {
-//         // console.log(counter, object.postId)
-//         if (Math.floor(object.postId%10) === 9){
-//             cardsWrapper.append(createCardNode(object))
-//             counter += 10
-//         }
-//     }
-// })
+getData(requestUrl)
+    .then(data => {
+        let resultObject,
+            resultArr = [];
+        setTimeout(() => {
+            for (let item of data) {
+                resultObject = {
+                    userId: item.userId,
+                    postId: item.id,
+                    title: item.title.slice(0, 15),
+                    text: item.body.slice(0, 30)
+                }
+                resultArr.push(resultObject)
+            }
+
+        }, 1000)
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(resultArr)
+            }, 2000)
+        })
+    }).then(newData => {
+    let counter = 10;
+    for (let object of newData) {
+        // console.log(counter, object.postId)
+        if (Math.floor(object.postId%10) === 9){
+            cardsWrapper.append(createCardNode(object))
+            counter += 10
+        }
+    }
+})
 
 
 menuItems.forEach((item, index) => {
