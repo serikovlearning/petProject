@@ -16,12 +16,22 @@ body {
   margin: 0 auto;
 }
 
-.main-content {
+.content__wrapper {
   width: 100%;
+  height: 100vh;
   overflow: hidden;
+  display: flex;
 }
-.main-content > main {
+.content__wrapper > section {
+  flex: 1 0 100%;
   transition: 1s ease-in-out;
+}
+.content__wrapper .account-content {
+  transform: translateX(-200%);
+}
+
+.menu__item.active h1, .menu__item.active > div > .nav-icon {
+  color: white;
 }
 
 nav {
@@ -355,9 +365,9 @@ header {
   width: 100%;
   display: flex;
   background-color: #0F2133;
-  height: 80vh;
+  height: 85vh;
   border-radius: 10px;
-  padding: 40px;
+  padding: 25px 40px;
 }
 
 .user__profile {
@@ -412,22 +422,57 @@ header {
   width: 50%;
 }
 
-.content__wrapper {
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
+.reg__from__wrapper {
   display: flex;
+  flex-direction: column;
 }
-.content__wrapper > section {
-  flex: 1 0 100%;
-  transition: 1s ease-in-out;
-}
-.content__wrapper .account-content {
-  transform: translateX(-200%);
+.reg__from__wrapper h1 {
+  text-align: center;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 44px;
+  color: #ffffff;
+  margin-bottom: 30px;
 }
 
-.menu__item.active h1, .menu__item.active > div > .nav-icon {
+.user__registration {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.user__registration input {
+  width: 50%;
+  padding: 8px;
+  border-radius: 5px;
+  background-color: #122030;
+  border: none;
+  color: #ffffff;
+  box-shadow: 0 0 3px #2D98FF;
+  margin-bottom: 15px;
+  text-align: center;
+}
+.user__registration input::placeholder {
+  color: #5B6E82;
+}
+.user__registration input[type=submit] {
+  padding: 15px 10px;
+  width: 25%;
   color: white;
+  background-color: #c42f4c;
+}
+.user__registration input[type=checkbox] {
+  padding: 0;
+  box-shadow: none;
+}
+.user__registration label {
+  margin-bottom: 10px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: #ffffff;
 }
 
 /*# sourceMappingURL=style.css.map */

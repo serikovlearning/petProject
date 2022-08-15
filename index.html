@@ -207,7 +207,27 @@
     </main>
   </section>
   <section class="account-content">
-    <main>
+    <main class="registration__form">
+      <div class="container user__path reg__from__wrapper">
+        <h1>Пожалуйста, пройдите регистрацию</h1>
+        <form action="" class="user__registration">
+          <label for="username">Имя пользователя</label>
+          <input type="text" name="username" id="username" placeholder="username">
+          <label for="password">Пароль</label>
+          <input type="password" name="password" id="password" placeholder="qwerty123">
+          <label for="passport__data">ФИО</label>
+          <input type="text" required name="passport__data" id="passport__data" placeholder="Иванов Иван Иванович">
+          <label for="user__number">Номер телефона</label>
+          <input type="tel" name="user__number" id="user__number" placeholder="8-777-777-77-77">
+          <label for="user__email">Почта</label>
+          <input type="email" required name="user__email" id="user__email" placeholder="example@example.com">
+          <label for="personal__info">Согласие на обработку персональных данных</label>
+          <input type="checkbox" name="personal__info" id="personal__info">
+          <input type="submit" value="Подтвердить регистрацию">
+        </form>
+      </div>
+    </main>
+    <main class="user__logged">
       <div class="container user__path">
         <div class="user__profile">
           <h2 class="user__title">Random User</h2>
@@ -215,7 +235,7 @@
             <img src="img/account/user.png" alt="" class="user__img">
           </div>
           <div class="main__info">
-            <h3 class="main__info-text">First name: <span> Egor</span> </h3>
+            <h3 class="main__info-text">First name: <span> Egor</span></h3>
             <h3 class="main__info-text">Second name: </h3>
             <h3 class="main__info-text">Phone: </h3>
             <h3 class="main__info-text">Mail: </h3>

@@ -37,50 +37,70 @@ function createCardNode(cardData) {
     return card
 }
 
-const requestUrl = 'https://jsonplaceholder.typicode.com/posts'
 
-function getData(url) {
-    return fetch(url)
-        .then(response => {
-            if (response.ok) {
-                return response.json()
-            }
-        })
+// send request to the API, and controls the data from it, draw it on page
+
+// const requestUrl = 'https://jsonplaceholder.typicode.com/posts'
+//
+// function getData(url) {
+//     return fetch(url)
+//         .then(response => {
+//             if (response.ok) {
+//                 return response.json()
+//             }
+//         })
+// }
+//
+// getData(requestUrl)
+//     .then(data => {
+//         let resultObject,
+//             resultArr = [];
+//         setTimeout(() => {
+//             for (let item of data) {
+//                 resultObject = {
+//                     userId: item.userId,
+//                     postId: item.id,
+//                     title: item.title.slice(0, 15),
+//                     text: item.body.slice(0, 30)
+//                 }
+//                 resultArr.push(resultObject)
+//             }
+//
+//         }, 1000)
+//         return new Promise((resolve, reject) => {
+//             setTimeout(() => {
+//                 resolve(resultArr)
+//             }, 2000)
+//         })
+//     }).then(newData => {
+//     let counter = 10;
+//     for (let object of newData) {
+//         // console.log(counter, object.postId)
+//         if (Math.floor(object.postId%10) === 9){
+//             cardsWrapper.append(createCardNode(object))
+//             counter += 10
+//         }
+//     }
+// })
+
+// Sign up and registration logic will be down
+let userLogged = false;
+
+const regForm = document.querySelector('.registration__form'),
+    userLoggedPage = document.querySelector('.user__logged');
+
+
+const controlAccountPage = () => {
+    if (!userLogged) {
+        regForm.style.display = 'block'
+        userLoggedPage.style.display = 'none'
+    } else if (userLogged) {
+        regForm.style.display = 'none'
+        userLoggedPage.style.display = 'block'
+    }
 }
 
-getData(requestUrl)
-    .then(data => {
-        let resultObject,
-            resultArr = [];
-        setTimeout(() => {
-            for (let item of data) {
-                resultObject = {
-                    userId: item.userId,
-                    postId: item.id,
-                    title: item.title.slice(0, 15),
-                    text: item.body.slice(0, 30)
-                }
-                resultArr.push(resultObject)
-            }
-
-        }, 1000)
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(resultArr)
-            }, 2000)
-        })
-    }).then(newData => {
-    let counter = 10;
-    for (let object of newData) {
-        // console.log(counter, object.postId)
-        if (Math.floor(object.postId%10) === 9){
-            cardsWrapper.append(createCardNode(object))
-            counter += 10
-        }
-    }
-})
-
-
+// Nav items add and remove class active
 menuItems.forEach((item, index) => {
     item.addEventListener('click', () => {
         item.classList.add('active')
@@ -89,25 +109,31 @@ menuItems.forEach((item, index) => {
                 menuItems[i].classList.remove('active')
             }
         }
-
-
         contentSections[0].style.transform = `translateX(100%)`
+
+
         if (index === 0) {
+            controlAccountPage()
             contentSections[1].style.transform = `translateX(-100%)`
         }
     })
 })
 
+// Nav logo restore default page
+navLogo.addEventListener('click', () => {
+    contentSections[0].style.transform = `translateX(0)`
+    contentSections[1].style.transform = `translateX(-200%)`
+    menuItems.forEach(item => {
+        item.classList.remove('active')
+    })
+})
+
+// control which info will show on page with from dashboard/task/history/leaderboard
 controlItems.forEach((item, i) => {
-    let currentItem;
-
     item.addEventListener('click', () => {
-        currentItem = item
-        currentItem.classList.add('active')
-        cardsTitle.innerHTML = currentItem.innerHTML
-
+        item.classList.add('active')
+        cardsTitle.innerHTML = item.innerHTML
         // drawCards(i)
-
         for (let x = 0; x < controlItems.length; x++) {
             if (x !== i) {
                 controlItems[x].classList.remove('active')
@@ -116,13 +142,6 @@ controlItems.forEach((item, i) => {
     })
 })
 
-navLogo.addEventListener('click', () => {
-    contentSections[0].style.transform = `translateX(0)`
-    contentSections[1].style.transform = `translateX(-200%)`
-    menuItems.forEach(item => {
-        item.classList.remove('active')
-    })
-})
 
 function getRandomArbitrary(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
