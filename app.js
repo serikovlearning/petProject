@@ -8,6 +8,12 @@ const controlItems = document.querySelectorAll('.controls-item'),
     contentSections = document.querySelectorAll('.content__wrapper > section')
 
 
+// some help functions
+
+function getRandomArbitrary(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+}
+
 function createCardNode(cardData) {
     const card = document.createElement('div'),
         cardItemRight = document.createElement('div'),
@@ -37,23 +43,6 @@ function createCardNode(cardData) {
     return card
 }
 
-
-// Sign up and registration logic will be down
-let userLogged = false;
-
-const regForm = document.querySelector('.registration__form'),
-    userLoggedPage = document.querySelector('.user__logged');
-
-
-const controlAccountPage = () => {
-    if (!userLogged) {
-        regForm.style.display = 'block'
-        userLoggedPage.style.display = 'none'
-    } else if (userLogged) {
-        regForm.style.display = 'none'
-        userLoggedPage.style.display = 'block'
-    }
-}
 
 // Nav items add and remove class active
 menuItems.forEach((item, index) => {
@@ -98,54 +87,51 @@ controlItems.forEach((item, i) => {
 })
 
 
-function getRandomArbitrary(min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
-}
+// Getting data from jsonplaceholder
+// const requestUrl = 'https://jsonplaceholder.typicode.com/posts'
+//
+// function getData(url) {
+//     return fetch(url)
+//         .then(response => {
+//             if (response.ok) {
+//                 return response.json()
+//             }
+//         })
+// }
+//
+// getData(requestUrl)
+//     .then(data => {
+//         let resultObject,
+//             resultArr = [];
+//         setTimeout(() => {
+//             for (let item of data) {
+//                 resultObject = {
+//                     userId: item.userId,
+//                     postId: item.id,
+//                     title: item.title.slice(0, 15),
+//                     text: item.body.slice(0, 30)
+//                 }
+//                 resultArr.push(resultObject)
+//             }
+//
+//         }, 1000)
+//         return new Promise((resolve, reject) => {
+//             setTimeout(() => {
+//                 resolve(resultArr)
+//             }, 2000)
+//         })
+//     }).then(newData => {
+//     let counter = 10;
+//     for (let object of newData) {
+//         // console.log(counter, object.postId)
+//         if (Math.floor(object.postId % 10) === 9) {
+//             cardsWrapper.append(createCardNode(object))
+//             counter += 10
+//         }
+//     }
+// })
 
-const requestUrl = 'https://jsonplaceholder.typicode.com/posts'
-
-function getData(url) {
-
-    return fetch(url)
-        .then(response => {
-            if (response.ok) {
-                return response.json()
-            }
-        })
-}
-
-getData(requestUrl)
-    .then(data => {
-        let resultObject,
-            resultArr = [];
-        setTimeout(() => {
-            for (let item of data) {
-                resultObject = {
-                    userId: item.userId,
-                    postId: item.id,
-                    title: item.title.slice(0, 15),
-                    text: item.body.slice(0, 30)
-                }
-                resultArr.push(resultObject)
-            }
-
-        }, 1000)
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(resultArr)
-            }, 2000)
-        })
-    }).then(newData => {
-    let counter = 10;
-    for (let object of newData) {
-        // console.log(counter, object.postId)
-        if (Math.floor(object.postId % 10) === 9) {
-            cardsWrapper.append(createCardNode(object))
-            counter += 10
-        }
-    }
-})
-
+// Add interesting feature to user account view with charts js
 let userAcitivtyData = [
     getRandomArbitrary(0, 20),
     getRandomArbitrary(5, 10),
@@ -199,10 +185,40 @@ const myChart = new Chart(ctx, {
     },
 });
 
+
+// Sign up and registration logic will be down
+let userLogged = false;
+
+const regForm = document.querySelector('.registration__form'),
+    userLoggedPage = document.querySelector('.user__logged');
+
+
+
+function CreateUser(...arguments) {
+        this.username = arguments[0]
+        this.password = arguments[1]
+        this.passport = arguments[2]
+        this.tel = arguments[3]
+        this.email = arguments[4]
+}
+
+
+let newUser;
+
+const controlAccountPage = () => {
+    if (!userLogged) {
+        regForm.style.display = 'block'
+        userLoggedPage.style.display = 'none'
+    } else if (userLogged) {
+        regForm.style.display = 'none'
+        userLoggedPage.style.display = 'block'
+    }
+}
+
 // form validation
 
 const form = document.querySelector('.user__registration'),
-    allInputs = document.querySelectorAll('.user__registration input'),
+    reqInputs = document.querySelectorAll('.req__input'),
     usernameInput = document.querySelector('#username'),
     passwordInput = document.querySelector('#password'),
     passportInput = document.querySelector('#passport__data'),
@@ -214,6 +230,10 @@ const form = document.querySelector('.user__registration'),
 function validateEmail(email) {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase())
+}
+
+function validatePwd(pwd) {
+    return pwd.length >= 8
 }
 
 function validateTel(tel) {
@@ -233,10 +253,11 @@ function changeValidationColor(condition, input) {
 
 window.addEventListener('input', function (e) {
     let value = e.target.value;
+
     switch (e.target) {
 
         case (passwordInput) :
-            changeValidationColor(value.length >= 8, e.target)
+            changeValidationColor(validatePwd(value), e.target)
             break
 
         case (emailInput) :
@@ -245,9 +266,11 @@ window.addEventListener('input', function (e) {
 
         case (telInput) :
             changeValidationColor(validateTel(value), e.target)
+            break
     }
 
 })
+
 form.onsubmit = (e) => {
     e.preventDefault()
     let usernameVal = usernameInput.value,
@@ -256,17 +279,29 @@ form.onsubmit = (e) => {
         telVal = telInput.value,
         emailVal = emailInput.value;
 
-    allInputs.forEach((item, index) => {
-        if (item.value == '') {
+
+
+    reqInputs.forEach((item, index) => {
+        if (item.value === '') {
             item.classList.add('wrong__value')
         } else {
             item.classList.remove('wrong__value')
+            console.log('all works')
+        }
+
+        if (item.classList.contains('wrong__value') && personalInfoInput.checked) {
+            return false
+        } else {
+            newUser = new CreateUser(
+                usernameVal,
+                passwordVal,
+                passportVal || 'Данные отсутстуют',
+                telVal,
+                emailVal
+            )
+            controlAccountPage()
+            return true
         }
     })
-
-    changeValidationColor(passwordVal.length >= 8, passwordInput)
-    changeValidationColor(validateEmail(emailVal), emailInput)
-
-    return false;
 }
-// //phone
+

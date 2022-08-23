@@ -211,17 +211,17 @@
       <div class="container user__path reg__from__wrapper">
         <h1>Пожалуйста, пройдите регистрацию</h1>
         <form action="" class="user__registration">
-          <label for="username">Имя пользователя</label>
-          <input type="text" name="username" id="username" placeholder="username">
-          <label for="password">Пароль</label>
-          <input type="password" name="password" id="password" placeholder="qwerty123 (не менее 8 символов)">
+          <label for="username">Имя пользователя*</label>
+          <input type="text" name="username" id="username" placeholder="username" class="req__input">
+          <label for="password">Пароль*</label>
+          <input type="password" name="password" id="password" placeholder="qwerty123 (не менее 8 символов)" class="req__input">
           <label for="passport__data">ФИО</label>
           <input type="text" name="passport__data" id="passport__data" placeholder="Иванов Иван Иванович">
-          <label for="user__number">Номер телефона</label>
-          <input type="tel" name="user__number" id="user__number" placeholder="8-777-777-77-77">
-          <label for="user__email">Почта</label>
-          <input type="email" name="user__email" id="user__email" placeholder="example@example.com">
-          <label for="personal__info">Согласие на обработку персональных данных</label>
+          <label for="user__number">Номер телефона*</label>
+          <input type="tel" name="user__number" id="user__number" placeholder="8-777-777-77-77" class="req__input">
+          <label for="user__email">Почта*</label>
+          <input type="email" name="user__email" id="user__email" placeholder="example@example.com" class="req__input">
+          <label for="personal__info">Согласие на обработку персональных данных*</label>
           <input type="checkbox" name="personal__info" id="personal__info">
           <input type="submit" value="Подтвердить регистрацию" id="submit-btn">
         </form>
