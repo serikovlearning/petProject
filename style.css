@@ -456,6 +456,12 @@ header {
 .user__registration input::placeholder {
   color: #5B6E82;
 }
+.user__registration .wrong__value {
+  box-shadow: 0 0 10px 10px rgba(196, 47, 76, 0.62);
+}
+.user__registration .normal__value {
+  box-shadow: 0 0 10px 10px rgba(57, 196, 47, 0.62);
+}
 .user__registration input[type=submit] {
   padding: 15px 10px;
   width: 25%;
