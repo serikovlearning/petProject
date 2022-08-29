@@ -193,13 +193,13 @@ const regForm = document.querySelector('.registration__form'),
     userLoggedPage = document.querySelector('.user__logged');
 
 
-
 function CreateUser(...arguments) {
-        this.username = arguments[0]
-        this.password = arguments[1]
-        this.passport = arguments[2]
-        this.tel = arguments[3]
-        this.email = arguments[4]
+    this.id = localStorage.length++
+    this.username = arguments[0]
+    this.password = arguments[1]
+    this.passport = arguments[2]
+    this.tel = arguments[3]
+    this.email = arguments[4]
 }
 
 
@@ -227,9 +227,28 @@ const form = document.querySelector('.user__registration'),
     personalInfoInput = document.querySelector('#personal__info'),
     submitBtn = document.querySelector('#submit-btn');
 
+
+function checkInSavedData(item, userFields) {
+    let savedData = [];
+    let resultValue = true;
+    for (let i = 0; i <= localStorage.length; i++) {
+        let user = JSON.parse(localStorage.getItem(`${i}`));
+        if (user !== null) {
+            savedData.push(user[`${userFields}`])
+        }
+    }
+    for (let userData of savedData) {
+        if (userData == item) {
+            resultValue = false
+            break
+        }
+    }
+    return resultValue
+}
+
 function validateEmail(email) {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase())
+    return re.test(String(email).toLowerCase()) && checkInSavedData(email, 'email')
 }
 
 function validatePwd(pwd) {
@@ -238,7 +257,13 @@ function validatePwd(pwd) {
 
 function validateTel(tel) {
     let re = /^[0-9\s]*$/;
-    return re.test(tel.toString().toLowerCase()) && tel.length >= 11
+    return re.test(tel.toString().toLowerCase()) && tel.length >= 11 && checkInSavedData(tel, 'tel')
+}
+
+
+
+function validateUsername(username) {
+    return checkInSavedData(username, 'username')
 }
 
 function changeValidationColor(condition, input) {
@@ -267,9 +292,31 @@ window.addEventListener('input', function (e) {
         case (telInput) :
             changeValidationColor(validateTel(value), e.target)
             break
-    }
 
+        case (usernameInput) :
+            changeValidationColor(validateUsername(value), e.target)
+            break
+    }
 })
+
+function checkFinalVal() {
+    let wrongInputs = [];
+    reqInputs.forEach(item => {
+        wrongInputs.push(item)
+    })
+    reqInputs.forEach((item, index) => {
+        if (item.value === '') {
+            item.classList.add('wrong__value')
+        } else {
+            item.classList.remove('wrong__value')
+        }
+
+        if (!item.classList.contains('wrong__value') && personalInfoInput.checked) {
+            wrongInputs.splice(wrongInputs.indexOf(item), 1)
+        }
+    })
+    return wrongInputs.length <= 0
+}
 
 form.onsubmit = (e) => {
     e.preventDefault()
@@ -279,29 +326,39 @@ form.onsubmit = (e) => {
         telVal = telInput.value,
         emailVal = emailInput.value;
 
+    // reqInputs.forEach((item, index) => {
+    //     if (item.value === '') {
+    //         item.classList.add('wrong__value')
+    //     } else {
+    //         item.classList.remove('wrong__value')
+    //     }
+    //
+    //     if (item.classList.contains('wrong__value') && personalInfoInput.checked) {
+    //         return false
+    //     } else {
+    if (checkFinalVal()) {
+        newUser = new CreateUser(
+            usernameVal,
+            passwordVal,
+            passportVal || 'Данные отсутстуют',
+            telVal,
+            emailVal
+        )
 
+        localStorage.setItem(`${localStorage.length++}`, JSON.stringify(newUser))
+        controlAccountPage()
+        let myUser = JSON.parse(localStorage.getItem(`${newUser.id}`))
+        console.log(myUser)
+        return true
+    }
 
-    reqInputs.forEach((item, index) => {
-        if (item.value === '') {
-            item.classList.add('wrong__value')
-        } else {
-            item.classList.remove('wrong__value')
-            console.log('all works')
-        }
-
-        if (item.classList.contains('wrong__value') && personalInfoInput.checked) {
-            return false
-        } else {
-            newUser = new CreateUser(
-                usernameVal,
-                passwordVal,
-                passportVal || 'Данные отсутстуют',
-                telVal,
-                emailVal
-            )
-            controlAccountPage()
-            return true
-        }
-    })
 }
+
+let usersList = [];
+for (let i = 0; i <= localStorage.length; i++) {
+    let user = JSON.parse(localStorage.getItem(`${i}`));
+    usersList.push(user)
+}
+
+// console.log(usersList)
 
