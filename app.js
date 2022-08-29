@@ -198,8 +198,8 @@ function CreateUser(...arguments) {
     this.username = arguments[0]
     this.password = arguments[1]
     this.passport = arguments[2]
-    this.tel = arguments[3]
-    this.email = arguments[4]
+    this.user__number = arguments[3]
+    this.user__email = arguments[4]
 }
 
 
@@ -225,8 +225,52 @@ const form = document.querySelector('.user__registration'),
     telInput = document.querySelector('#user__number'),
     emailInput = document.querySelector('#user__email'),
     personalInfoInput = document.querySelector('#personal__info'),
-    submitBtn = document.querySelector('#submit-btn');
+    submitBtn = document.querySelector('#submit-btn'),
+    labels = document.querySelectorAll('.user__registration label')
 
+
+let textUsername = labels[0].innerHTML,
+    textTel = labels[3].innerHTML,
+    textEmail = labels[4].innerHTML
+
+
+function showItemIsIaken(value, label) {
+    let labelNumber;
+    switch (label) {
+        case ('username'):
+            labelNumber = 0
+            labels[labelNumber].innerHTML = `Данное имя пользователя занято`
+            labels[labelNumber].classList.add('invalid__value')
+            if (value) {
+                labels[labelNumber].innerHTML = textUsername
+                labels[labelNumber].classList.remove('invalid__value')
+
+            }
+            break
+
+        case ('user__number'):
+            labelNumber = 3
+            labels[labelNumber].innerHTML = `Данный номер занят`
+            labels[labelNumber].classList.add('invalid__value')
+            if (value) {
+                labels[labelNumber].innerHTML = textTel
+                labels[labelNumber].classList.remove('invalid__value')
+            }
+            break
+
+        case ('user__email'):
+            labelNumber = 4
+            labels[labelNumber].innerHTML = `Данный email занят`
+            labels[labelNumber].classList.add('invalid__value')
+            if (value) {
+                labels[labelNumber].innerHTML = `${textEmail}`
+                labels[labelNumber].classList.remove('invalid__value')
+            }
+            break
+    }
+
+
+}
 
 function checkInSavedData(item, userFields) {
     let savedData = [];
@@ -243,27 +287,27 @@ function checkInSavedData(item, userFields) {
             break
         }
     }
+    showItemIsIaken(resultValue, userFields)
     return resultValue
 }
 
-function validateEmail(email) {
+function validateEmail(email, input) {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase()) && checkInSavedData(email, 'email')
+    return re.test(String(email).toLowerCase()) && checkInSavedData(email, input.attributes.name.value)
 }
 
 function validatePwd(pwd) {
     return pwd.length >= 8
 }
 
-function validateTel(tel) {
+function validateTel(tel, input) {
     let re = /^[0-9\s]*$/;
-    return re.test(tel.toString().toLowerCase()) && tel.length >= 11 && checkInSavedData(tel, 'tel')
+    return re.test(tel.toString().toLowerCase()) && tel.length >= 11 && checkInSavedData(tel, input.attributes.name.value)
 }
 
 
-
-function validateUsername(username) {
-    return checkInSavedData(username, 'username')
+function validateUsername(username, input) {
+    return checkInSavedData(username, input.attributes.name.value)
 }
 
 function changeValidationColor(condition, input) {
@@ -276,31 +320,54 @@ function changeValidationColor(condition, input) {
     }
 }
 
+function changeBtnColor() {
+    reqInputs.forEach(item => {
+        if (item.classList.contains('normal__value') && personalInfoInput.checked) {
+            submitBtn.style.backgroundColor = `rgba(57, 196, 47, 0.22)`
+        } else {
+            submitBtn.style.backgroundColor = ` #c42f4c`
+        }
+    })
+}
+
 window.addEventListener('input', function (e) {
     let value = e.target.value;
+    let validBool;
 
     switch (e.target) {
 
         case (passwordInput) :
-            changeValidationColor(validatePwd(value), e.target)
+            validBool = validatePwd(value, e.target)
+            changeValidationColor(validBool, e.target)
             break
 
         case (emailInput) :
-            changeValidationColor(validateEmail(value), e.target)
+            validBool = validateEmail(value, e.target)
+            changeValidationColor(validBool, e.target)
             break
 
         case (telInput) :
-            changeValidationColor(validateTel(value), e.target)
+            validBool = validateTel(value, e.target)
+            changeValidationColor(validBool, e.target)
             break
 
         case (usernameInput) :
-            changeValidationColor(validateUsername(value), e.target)
+            validBool = validateUsername(value, e.target)
+            changeValidationColor(validBool, e.target)
             break
     }
+    changeBtnColor()
+
+})
+
+
+personalInfoInput.addEventListener('click', () => {
+    changeBtnColor()
 })
 
 function checkFinalVal() {
-    let wrongInputs = [];
+    let wrongInputs = [],
+        result = true;
     reqInputs.forEach(item => {
         wrongInputs.push(item)
     })
@@ -315,7 +382,15 @@ function checkFinalVal() {
             wrongInputs.splice(wrongInputs.indexOf(item), 1)
         }
     })
-    return wrongInputs.length <= 0
+    for (let input of reqInputs) {
+        if (input.attributes.name.value !== 'password') {
+            if (!checkInSavedData(input.value, input.attributes['name'].value)) {
+                result = false
+                changeValidationColor(result, input)
+            }
+        }
+    }
+    return wrongInputs.length <= 0 && result
 }
 
 form.onsubmit = (e) => {
@@ -326,16 +401,7 @@ form.onsubmit = (e) => {
         telVal = telInput.value,
         emailVal = emailInput.value;
 
-    // reqInputs.forEach((item, index) => {
-    //     if (item.value === '') {
-    //         item.classList.add('wrong__value')
-    //     } else {
-    //         item.classList.remove('wrong__value')
-    //     }
-    //
-    //     if (item.classList.contains('wrong__value') && personalInfoInput.checked) {
-    //         return false
-    //     } else {
+
     if (checkFinalVal()) {
         newUser = new CreateUser(
             usernameVal,
@@ -359,6 +425,4 @@ for (let i = 0; i <= localStorage.length; i++) {
     let user = JSON.parse(localStorage.getItem(`${i}`));
     usersList.push(user)
 }
-
-// console.log(usersList)
 

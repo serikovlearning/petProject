@@ -479,6 +479,14 @@ header {
   font-size: 16px;
   line-height: 20px;
   color: #ffffff;
+  transition: 1s ease-in-out;
+}
+.user__registration .invalid__value {
+  text-align: center;
+  padding: 5px;
+  width: 50%;
+  background-color: #c42f4c;
+  border-radius: 5px;
 }
 
 /*# sourceMappingURL=style.css.map */
