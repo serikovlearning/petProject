@@ -64,7 +64,7 @@ menuItems.forEach((item, index) => {
 })
 
 // Nav logo restore default page
-navLogo.addEventListener('click', () => {
+function restoreDefaultPage() {
     contentSections[0].style.transform = `translateX(0)`
     contentSections[1].style.transform = `translateX(-200%)`
     if (singInForm.style.display !== 'block' && !userLogged) {
@@ -73,6 +73,9 @@ navLogo.addEventListener('click', () => {
     menuItems.forEach(item => {
         item.classList.remove('active')
     })
+}
+navLogo.addEventListener('click', () => {
+    restoreDefaultPage()
 })
 
 // control which info will show on page with from dashboard/task/history/leaderboard
@@ -296,7 +299,7 @@ lastBtn.addEventListener('click', () => {
         sessionStorage.setItem('userLogged', JSON.stringify(userLogged))
         logout = true;
         controlAccountPage()
-
+        restoreDefaultPage()
     }
 })
 
@@ -304,7 +307,7 @@ loginBtn.addEventListener('click', () => {
     let checkThisUser = {};
     for (let i = 0; i <= localStorage.length; i++) {
         let user = JSON.parse(localStorage.getItem(`${i}`));
-        if (user && user.username === loginInputs[0].value) {
+        if (user && user.username === loginInputs[0].value || user.user__email === loginInputs[0].value) {
             checkThisUser = user
             break
         }
@@ -353,6 +356,7 @@ function CreateUser(...arguments) {
     this.passport = arguments[2]
     this.user__number = arguments[3]
     this.user__email = arguments[4]
+    this.points = 0
 }
 
 
