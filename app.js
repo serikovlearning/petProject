@@ -93,49 +93,50 @@ controlItems.forEach((item, i) => {
 })
 
 
-// Getting data from jsonplaceholder
-// const requestUrl = 'https://jsonplaceholder.typicode.com/posts'
-//
-// function getData(url) {
-//     return fetch(url)
-//         .then(response => {
-//             if (response.ok) {
-//                 return response.json()
-//             }
-//         })
-// }
-//
-// getData(requestUrl)
-//     .then(data => {
-//         let resultObject,
-//             resultArr = [];
-//         setTimeout(() => {
-//             for (let item of data) {
-//                 resultObject = {
-//                     userId: item.userId,
-//                     postId: item.id,
-//                     title: item.title.slice(0, 15),
-//                     text: item.body.slice(0, 30)
-//                 }
-//                 resultArr.push(resultObject)
-//             }
-//
-//         }, 1000)
-//         return new Promise((resolve, reject) => {
-//             setTimeout(() => {
-//                 resolve(resultArr)
-//             }, 2000)
-//         })
-//     }).then(newData => {
-//     let counter = 10;
-//     for (let object of newData) {
-//         // console.log(counter, object.postId)
-//         if (Math.floor(object.postId % 10) === 9) {
-//             cardsWrapper.append(createCardNode(object))
-//             counter += 10
-//         }
-//     }
-// })
+//region Getting data from jsonplaceholder
+const requestUrl = 'https://jsonplaceholder.typicode.com/posts'
+
+function getData(url) {
+    return fetch(url)
+        .then(response => {
+            if (response.ok) {
+                return response.json()
+            }
+        })
+}
+
+getData(requestUrl)
+    .then(data => {
+        let resultObject,
+            resultArr = [];
+        setTimeout(() => {
+            for (let item of data) {
+                resultObject = {
+                    userId: item.userId,
+                    postId: item.id,
+                    title: item.title.slice(0, 15),
+                    text: item.body.slice(0, 30)
+                }
+                resultArr.push(resultObject)
+            }
+
+        }, 1000)
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(resultArr)
+            }, 2000)
+        })
+    }).then(newData => {
+    let counter = 10;
+    for (let object of newData) {
+        // console.log(counter, object.postId)
+        if (Math.floor(object.postId % 10) === 9) {
+            cardsWrapper.append(createCardNode(object))
+            counter += 10
+        }
+    }
+})
+//endregion
 
 //region Add interesting feature to user account view with charts js
 let userAcitivtyData = [
@@ -263,8 +264,8 @@ function changeUserData(user) {
     if (user.username !== 'admin') {
         userTitle.innerHTML = `<span>${user.username}</span>`
         userDataList[0].innerHTML = `Full name: <span>${user.passport}</span>`
-        userDataList[1].innerHTML = `Mail: <span>${user.user__number}</span>`
-        userDataList[2].innerHTML = `Phone: <span>${user.user__email}</span>`
+        userDataList[1].innerHTML = `Phone: <span>${user.user__number}</span>`
+        userDataList[2].innerHTML = `Mail: <span>${user.user__email}</span>`
         userDataList[3].innerHTML = `Role: <span>just user</span>`
         userDataList[4].innerHTML = `Maximum Points: <span>0</span>`
 
