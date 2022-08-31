@@ -202,6 +202,12 @@ function CreateUser(...arguments) {
     this.user__email = arguments[4]
 }
 
+const simpleAdmin = {
+    username: 'admin',
+    password: 'admin'
+}
+localStorage.setItem('0', JSON.stringify(simpleAdmin))
+
 
 let newUser;
 
@@ -414,7 +420,18 @@ form.onsubmit = (e) => {
         localStorage.setItem(`${localStorage.length++}`, JSON.stringify(newUser))
         controlAccountPage()
         let myUser = JSON.parse(localStorage.getItem(`${newUser.id}`))
-        console.log(myUser)
+        form.querySelectorAll('input').forEach(item => {
+            if (item.attributes.type.value !== 'submit') {
+                if (item.attributes.type.value === 'checkbox') {
+                    item.checked = false
+                } else {
+                    item.value = ''
+                    item.classList.remove('normal__value')
+                }
+            } else {
+                item.style.backgroundColor = ` #c42f4c`
+            }
+        })
         return true
     }
 
