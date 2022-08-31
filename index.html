@@ -55,11 +55,11 @@
           Ru
         </p>
       </button>
-      <button class="header__left-side-btn">
-        <img src="img/header/wallet.svg" alt="">
+      <button class="header__left-side-btn another__login-btn">
+        JavaScript
       </button>
-      <button class="header__left-side-btn">
-        <img src="img/header/second_wallet.svg" alt="" class="too_much">
+      <button class="header__left-side-btn last__btn">
+        <ion-icon name="home-outline" class="home_btn"></ion-icon>
       </button>
     </div>
   </div>
@@ -92,8 +92,8 @@
             <a href="#">
               <img src="img/sectionFirst/social1.svg" alt="">
             </a>
-            <a href="#">
-              <h4 class="footer-text">www.xjustice.com</h4>
+            <a href="https://t.me/soundbyfaresto" target="_blank">
+              <h4 class="footer-text">soundbyfaresto</h4>
             </a>
           </footer>
         </div>
@@ -210,7 +210,7 @@
     <main class="registration__form">
       <div class="container user__path reg__from__wrapper">
         <h1>Пожалуйста, пройдите регистрацию</h1>
-        <form action="" class="user__registration">
+        <form action="" class="user__registration another__form">
           <label for="username">Имя пользователя*</label>
           <input type="text" name="username" id="username" placeholder="username" class="req__input">
           <label for="password">Пароль*</label>
@@ -228,6 +228,19 @@
         </form>
       </div>
     </main>
+    <main class="login__form">
+      <div class="container user__path reg__from__wrapper">
+        <h1>Войдите в аккаунт</h1>
+        <form action="" class="user__auth another__form">
+          <label for="username__auth">Введите имя пользователя или почту</label>
+          <input type="text" name="username__auth" id="username__auth" placeholder="username || sample@sample.com">
+          <label for="password__auth">Введите пароль</label>
+          <input type="password" name="password__auth" id="password__auth" placeholder="password">
+          <a href="#" class="no_account">Нет аккаунта? <span>Зарегистрируйтесь</span></a>
+          <input type="button" value="Войти" class="login__btn">
+        </form>
+      </div>
+    </main>
     <main class="user__logged">
       <div class="container user__path">
         <div class="user__profile">
@@ -236,8 +249,7 @@
             <img src="img/account/user.png" alt="" class="user__img">
           </div>
           <div class="main__info">
-            <h3 class="main__info-text">First name: <span> Egor</span></h3>
-            <h3 class="main__info-text">Second name: </h3>
+            <h3 class="main__info-text">Full name: <span></span></h3>
             <h3 class="main__info-text">Phone: </h3>
             <h3 class="main__info-text">Mail: </h3>
             <h3 class="main__info-text">Role: </h3>
@@ -253,8 +265,10 @@
     </main>
 
   </section>
+
+
 </div>
 
-<script src="app.js"></script>
+<script src="app.js" defer></script>
 </body>
 </html>

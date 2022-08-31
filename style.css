@@ -30,10 +30,6 @@ body {
   transform: translateX(-200%);
 }
 
-.menu__item.active h1, .menu__item.active > div > .nav-icon {
-  color: white;
-}
-
 nav {
   position: fixed;
   top: 20px;
@@ -117,6 +113,14 @@ ion-icon.active {
   color: #c42f4c;
 }
 
+.menu__item.active h1, .menu__item.active > div > .nav-icon {
+  color: white;
+}
+
+.menu__item.active:hover h1, .menu__item.active:hover > div > .nav-icon {
+  color: #c42f4c;
+}
+
 .header-logo {
   font-size: 172px;
   color: #c42f4c;
@@ -126,6 +130,7 @@ header {
   position: relative;
   top: 37px;
   height: 40px;
+  z-index: 100;
 }
 
 .header {
@@ -154,9 +159,10 @@ header {
   height: 40px;
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
   align-items: center;
   position: relative;
-  flex: 0 1 240px;
+  flex: 0 1 250px;
 }
 
 .header__left-side-btn {
@@ -167,6 +173,7 @@ header {
   display: flex;
   align-items: center;
   position: relative;
+  transition: 0.4s ease-in-out;
 }
 .header__left-side-btn:after {
   content: "";
@@ -191,7 +198,6 @@ header {
 
 .language {
   gap: 14px;
-  margin-right: 58px;
 }
 .language-text {
   font-style: normal;
@@ -422,6 +428,14 @@ header {
   width: 50%;
 }
 
+.account-content main {
+  transition: 0.5s ease-in-out;
+}
+
+.registration__form {
+  display: none;
+}
+
 .reg__from__wrapper {
   display: flex;
   flex-direction: column;
@@ -436,13 +450,13 @@ header {
   margin-bottom: 30px;
 }
 
-.user__registration {
+.another__form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-.user__registration input {
+.another__form input {
   width: 50%;
   padding: 8px;
   border-radius: 5px;
@@ -453,26 +467,26 @@ header {
   margin-bottom: 15px;
   text-align: center;
 }
-.user__registration input::placeholder {
+.another__form input::placeholder {
   color: #5B6E82;
 }
-.user__registration .wrong__value {
+.another__form .wrong__value {
   box-shadow: 0 0 10px 10px rgba(196, 47, 76, 0.22);
 }
-.user__registration .normal__value {
+.another__form .normal__value {
   box-shadow: 0 0 10px 10px rgba(57, 196, 47, 0.22);
 }
-.user__registration input[type=submit] {
+.another__form input[type=submit], .another__form .login__btn {
   padding: 15px 10px;
   width: 25%;
   color: white;
   background-color: #c42f4c;
 }
-.user__registration input[type=checkbox] {
+.another__form input[type=checkbox] {
   padding: 0;
   box-shadow: none;
 }
-.user__registration label {
+.another__form label {
   margin-bottom: 10px;
   font-style: normal;
   font-weight: 600;
@@ -481,12 +495,38 @@ header {
   color: #ffffff;
   transition: 1s ease-in-out;
 }
-.user__registration .invalid__value {
+.another__form .invalid__value {
   text-align: center;
   padding: 5px;
   width: 50%;
   background-color: #c42f4c;
   border-radius: 5px;
+}
+
+.no_account {
+  margin: 10px 0 20px;
+  color: #5B6E82;
+  font-size: 14px;
+}
+.no_account span {
+  color: #2D98FF;
+}
+
+.another__login-btn {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0px;
+  line-height: 15px;
+  color: #ffffff;
+}
+
+.last__btn {
+  cursor: pointer;
+}
+
+.last__btn .home_btn {
+  font-size: 24px;
 }
 
 /*# sourceMappingURL=style.css.map */

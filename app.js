@@ -67,6 +67,9 @@ menuItems.forEach((item, index) => {
 navLogo.addEventListener('click', () => {
     contentSections[0].style.transform = `translateX(0)`
     contentSections[1].style.transform = `translateX(-200%)`
+    if (singInForm.style.display !== 'block' && !userLogged) {
+        showAndHidePage(singInForm, regForm)
+    }
     menuItems.forEach(item => {
         item.classList.remove('active')
     })
@@ -131,7 +134,7 @@ controlItems.forEach((item, i) => {
 //     }
 // })
 
-// Add interesting feature to user account view with charts js
+//region Add interesting feature to user account view with charts js
 let userAcitivtyData = [
     getRandomArbitrary(0, 20),
     getRandomArbitrary(5, 10),
@@ -184,45 +187,153 @@ const myChart = new Chart(ctx, {
         }
     },
 });
+//endregion
 
-
-// Sign up and registration logic will be down
-let userLogged = false;
+//region Sign up and registration logic will be down
+let userLogged = false,
+    logout = false;
+sessionStorage.setItem('userLogged', JSON.stringify(userLogged))
 
 const regForm = document.querySelector('.registration__form'),
-    userLoggedPage = document.querySelector('.user__logged');
+    userLoggedPage = document.querySelector('.user__logged'),
+    singInForm = document.querySelector('.login__form'),
+    goSignUpBtn = document.querySelector('.no_account span'),
+    changePageTime = 1000;
 
+restorePage = hiddenPage => {
+    if (hiddenPage.style.display !== 'block') {
+        hiddenPage.style.display = 'block'
+        hiddenPage.style.transform = 'scale(0.1)'
+        hiddenPage.style.opacity = '0.1'
+        setTimeout(() => {
+            hiddenPage.style.transform = 'scale(1)'
+            hiddenPage.style.opacity = '1'
+        }, 100)
+    }
 
-function CreateUser(...arguments) {
-    this.id = localStorage.length++
-    this.username = arguments[0]
-    this.password = arguments[1]
-    this.passport = arguments[2]
-    this.user__number = arguments[3]
-    this.user__email = arguments[4]
 }
 
-const simpleAdmin = {
-    username: 'admin',
-    password: 'admin'
+showAndHidePage = (showPage, hidePage) => {
+    hidePage.style.transform = 'scale(0.1)'
+    hidePage.style.opacity = '0.1'
+
+    setTimeout(() => {
+        hidePage.style.display = 'none'
+        restorePage(showPage)
+        showPage.style.display = 'block'
+    }, changePageTime)
 }
-localStorage.setItem('0', JSON.stringify(simpleAdmin))
-
-
-let newUser;
 
 const controlAccountPage = () => {
-    if (!userLogged) {
-        regForm.style.display = 'block'
+    let checkLogged = JSON.parse(sessionStorage.getItem('userLogged'))
+    if (!checkLogged) {
         userLoggedPage.style.display = 'none'
-    } else if (userLogged) {
-        regForm.style.display = 'none'
-        userLoggedPage.style.display = 'block'
+        if (regForm.style.display === 'block') {
+            showAndHidePage(singInForm, regForm)
+        }
+        if (userLoggedPage.style.display === 'none' && !checkLogged && logout) {
+            showAndHidePage(singInForm, userLoggedPage)
+        }
+    } else if (checkLogged) {
+        showAndHidePage(userLoggedPage, singInForm)
+        // regForm.style.display = 'none'
+        // userLoggedPage.style.display = 'block'
     }
 }
 
-// form validation
 
+goSignUpBtn.addEventListener('click', () => {
+    showAndHidePage(regForm, singInForm)
+})
+
+// AUTH
+const loginForm = document.querySelector('.login__form'),
+    loginInputs = loginForm.querySelectorAll('input'),
+    loginLabels = loginForm.querySelectorAll('label'),
+    loginBtn = loginForm.querySelector('.login__btn'),
+    userDataList = document.querySelectorAll('.main__info-text'),
+    userTitle = document.querySelector('.user__title'),
+    topUserBtn = document.querySelector('.another__login-btn'),
+    lastBtn = document.querySelector('.last__btn')
+
+function changeUserData(user) {
+    if (user.username !== 'admin') {
+        userTitle.innerHTML = `<span>${user.username}</span>`
+        userDataList[0].innerHTML = `Full name: <span>${user.passport}</span>`
+        userDataList[1].innerHTML = `Mail: <span>${user.user__number}</span>`
+        userDataList[2].innerHTML = `Phone: <span>${user.user__email}</span>`
+        userDataList[3].innerHTML = `Role: <span>just user</span>`
+        userDataList[4].innerHTML = `Maximum Points: <span>0</span>`
+
+
+    } else {
+        userTitle.innerHTML = `<span>${user.username}</span>`
+        userDataList[3].innerHTML = `Role: <span>Admin</span>`
+    }
+    topUserBtn.style.transform = 'translateY(-300%)'
+    lastBtn.style.transform = 'translateY(-300%)'
+    setTimeout(() => {
+        topUserBtn.style.transform = 'translateY(0)'
+        lastBtn.style.transform = 'translateY(0)'
+        topUserBtn.textContent = `${user.username}`
+        lastBtn.innerHTML = '<ion-icon name="enter-outline"></ion-icon>'
+        lastBtn.classList.add('can__logout')
+    }, 400)
+}
+
+lastBtn.addEventListener('click', () => {
+    if (lastBtn.classList.contains('can__logout')) {
+        showAndHidePage(userLoggedPage, singInForm)
+        topUserBtn.style.transform = 'translateY(-200%)'
+        lastBtn.style.transform = 'translateY(-200%)'
+        setTimeout(() => {
+            topUserBtn.style.transform = 'translateY(0)'
+            lastBtn.style.transform = 'translateY(0)'
+            topUserBtn.textContent = `JavaScript`
+            lastBtn.innerHTML = '<ion-icon name="home-outline" class="home_btn"></ion-icon>'
+        }, 400)
+        userLogged = false
+        sessionStorage.setItem('userLogged', JSON.stringify(userLogged))
+        logout = true;
+        controlAccountPage()
+
+    }
+})
+
+loginBtn.addEventListener('click', () => {
+    let checkThisUser = {};
+    for (let i = 0; i <= localStorage.length; i++) {
+        let user = JSON.parse(localStorage.getItem(`${i}`));
+        if (user && user.username === loginInputs[0].value) {
+            checkThisUser = user
+            break
+        }
+    }
+    if (checkThisUser.password === loginInputs[1].value) {
+        // showAndHidePage(userLoggedPage, singInForm)
+        loginInputs[0].value = ''
+        loginInputs[1].value = ''
+        userLogged = true
+        sessionStorage.setItem('userLogged', JSON.stringify(userLogged))
+        changeUserData(checkThisUser)
+        controlAccountPage()
+    } else {
+        console.log('wrong password')
+    }
+})
+
+
+const simpleAdmin = {
+    username: 'admin',
+    password: 'admin',
+    role: 'admin'
+}
+localStorage.setItem('0', JSON.stringify(simpleAdmin))
+let newUser;
+
+//endregion
+
+//region form validation
 const form = document.querySelector('.user__registration'),
     reqInputs = document.querySelectorAll('.req__input'),
     usernameInput = document.querySelector('#username'),
@@ -233,6 +344,16 @@ const form = document.querySelector('.user__registration'),
     personalInfoInput = document.querySelector('#personal__info'),
     submitBtn = document.querySelector('#submit-btn'),
     labels = document.querySelectorAll('.user__registration label')
+
+
+function CreateUser(...arguments) {
+    this.id = localStorage.length++
+    this.username = arguments[0]
+    this.password = arguments[1]
+    this.passport = arguments[2]
+    this.user__number = arguments[3]
+    this.user__email = arguments[4]
+}
 
 
 let textUsername = labels[0].innerHTML,
@@ -442,4 +563,4 @@ for (let i = 0; i <= localStorage.length; i++) {
     let user = JSON.parse(localStorage.getItem(`${i}`));
     usersList.push(user)
 }
-
+//endregion
