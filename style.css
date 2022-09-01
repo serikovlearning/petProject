@@ -173,7 +173,7 @@ header {
   display: flex;
   align-items: center;
   position: relative;
-  transition: 0.4s ease-in-out;
+  transition: 0.2s ease-in-out;
 }
 .header__left-side-btn:after {
   content: "";
@@ -527,6 +527,58 @@ header {
 
 .last__btn .home_btn {
   font-size: 24px;
+}
+
+.modal {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: 0.5s ease-in-out;
+}
+.modal .modal-content {
+  position: absolute;
+  border: 2px solid #5B6E82;
+  border-radius: 15px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: 20%;
+  background-color: #294766;
+  padding: 20px 40px;
+  color: white;
+  transition: 0.5s ease-in-out;
+}
+.modal-title {
+  line-height: 50px;
+}
+.modal .modal-text {
+  line-height: 22px;
+}
+.modal .modal-text span {
+  color: #2D98FF;
+  cursor: pointer;
+}
+.modal .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.modal .close-btn .close-icon:hover {
+  color: #c42f4c;
+}
+
+.modal-visible {
+  display: block;
+}
+
+.modal-hidden {
+  display: none;
+  opacity: 0.1;
 }
 
 /*# sourceMappingURL=style.css.map */

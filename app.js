@@ -74,6 +74,7 @@ function restoreDefaultPage() {
         item.classList.remove('active')
     })
 }
+
 navLogo.addEventListener('click', () => {
     restoreDefaultPage()
 })
@@ -94,48 +95,48 @@ controlItems.forEach((item, i) => {
 
 
 //region Getting data from jsonplaceholder
-const requestUrl = 'https://jsonplaceholder.typicode.com/posts'
-
-function getData(url) {
-    return fetch(url)
-        .then(response => {
-            if (response.ok) {
-                return response.json()
-            }
-        })
-}
-
-getData(requestUrl)
-    .then(data => {
-        let resultObject,
-            resultArr = [];
-        setTimeout(() => {
-            for (let item of data) {
-                resultObject = {
-                    userId: item.userId,
-                    postId: item.id,
-                    title: item.title.slice(0, 15),
-                    text: item.body.slice(0, 30)
-                }
-                resultArr.push(resultObject)
-            }
-
-        }, 1000)
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(resultArr)
-            }, 2000)
-        })
-    }).then(newData => {
-    let counter = 10;
-    for (let object of newData) {
-        // console.log(counter, object.postId)
-        if (Math.floor(object.postId % 10) === 9) {
-            cardsWrapper.append(createCardNode(object))
-            counter += 10
-        }
-    }
-})
+// const requestUrl = 'https://jsonplaceholder.typicode.com/posts'
+//
+// function getData(url) {
+//     return fetch(url)
+//         .then(response => {
+//             if (response.ok) {
+//                 return response.json()
+//             }
+//         })
+// }
+//
+// getData(requestUrl)
+//     .then(data => {
+//         let resultObject,
+//             resultArr = [];
+//         setTimeout(() => {
+//             for (let item of data) {
+//                 resultObject = {
+//                     userId: item.userId,
+//                     postId: item.id,
+//                     title: item.title.slice(0, 15),
+//                     text: item.body.slice(0, 30)
+//                 }
+//                 resultArr.push(resultObject)
+//             }
+//
+//         }, 1000)
+//         return new Promise((resolve, reject) => {
+//             setTimeout(() => {
+//                 resolve(resultArr)
+//             }, 2000)
+//         })
+//     }).then(newData => {
+//     let counter = 10;
+//     for (let object of newData) {
+//         // console.log(counter, object.postId)
+//         if (Math.floor(object.postId % 10) === 9) {
+//             cardsWrapper.append(createCardNode(object))
+//             counter += 10
+//         }
+//     }
+// })
 //endregion
 
 //region Add interesting feature to user account view with charts js
@@ -250,7 +251,7 @@ goSignUpBtn.addEventListener('click', () => {
     showAndHidePage(regForm, singInForm)
 })
 
-// AUTH
+//region AUTH
 const loginForm = document.querySelector('.login__form'),
     loginInputs = loginForm.querySelectorAll('input'),
     loginLabels = loginForm.querySelectorAll('label'),
@@ -304,11 +305,53 @@ lastBtn.addEventListener('click', () => {
     }
 })
 
+const modalWindow = document.querySelector('.modal'),
+    modalContent = modalWindow.querySelector('.modal-content'),
+    modalTitle = modalWindow.querySelector('.modal-title'),
+    modalTexts = modalWindow.querySelectorAll('.modal-text'),
+    modalCloseBtn = modalWindow.querySelector('.close-btn .close-icon ')
+
+function closeModalWindow() {
+    modalWindow.style.opacity = '0.1'
+    modalContent.style.transform = 'translate(-50%,-50%) scale(0.1)'
+    setTimeout(() => {
+        // modalWindow.style.display = 'none'
+        modalWindow.classList.add('modal-hidden')
+        modalWindow.style.opacity = '1'
+        modalContent.style.transform = 'translate(-50%,-50%) scale(1)'
+    }, 450)
+}
+
+modalWindow.addEventListener('click', (e) => {
+    console.log(e.target)
+    if (e.target === modalWindow || e.target === modalCloseBtn) {
+        closeModalWindow()
+    }
+})
+modalWindow.addEventListener('mouseover', (e) => {
+    if(e.target === modalWindow) {
+        modalWindow.style.cursor = 'pointer'
+    } else {
+        modalWindow.style.cursor = 'initial'
+    }
+})
+
+
+modalTexts[1].querySelector('span').addEventListener('click', ()=>{
+    closeModalWindow()
+    showAndHidePage(regForm, singInForm)
+
+})
+function createModal(info) {
+    modalWindow.classList.add('modal-visible')
+    modalWindow.classList.remove('modal-hidden')
+}
+
 loginBtn.addEventListener('click', () => {
     let checkThisUser = {};
     for (let i = 0; i <= localStorage.length; i++) {
         let user = JSON.parse(localStorage.getItem(`${i}`));
-        if (user && user.username === loginInputs[0].value || user.user__email === loginInputs[0].value) {
+        if ((user && user.username === loginInputs[0].value) || (user && user.user__email === loginInputs[0].value)) {
             checkThisUser = user
             break
         }
@@ -322,7 +365,15 @@ loginBtn.addEventListener('click', () => {
         changeUserData(checkThisUser)
         controlAccountPage()
     } else {
-        console.log('wrong password')
+        console.log('works')
+        createModal('info')
+        // let loginDefaultValue = loginLabels[0].innerHTML
+        // loginLabels[0].textContent = 'Неверный логин или пароль, поробуйте снова'
+        // loginLabels[0].classList.add('invalid__value')
+        // setTimeout(() => {
+        //     loginLabels[0].innerHTML = loginDefaultValue
+        //     loginLabels[0].classList.remove('invalid__value')
+        // }, 5000)
     }
 })
 
@@ -334,7 +385,7 @@ const simpleAdmin = {
 }
 localStorage.setItem('0', JSON.stringify(simpleAdmin))
 let newUser;
-
+//endregion
 //endregion
 
 //region form validation
@@ -569,3 +620,4 @@ for (let i = 0; i <= localStorage.length; i++) {
     usersList.push(user)
 }
 //endregion
+
