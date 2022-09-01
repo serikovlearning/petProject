@@ -33,8 +33,8 @@ function createCardNode(cardData) {
 
     cardItemRightTitle.textContent = `${cardData.title}`
     cardItemRightText.textContent = `${cardData.text}`
-    cardItemLeftXp.textContent = `user: ${cardData.userId}`
-    cardItemLeftSubXp.textContent = `post number: ${cardData.postId}`
+    cardItemLeftXp.textContent = `level: ${cardData.userId}`
+    cardItemLeftSubXp.textContent = `task number: ${cardData.taskId}`
 
     cardItemRight.append(cardItemRightTitle, cardItemRightText)
     cardItemLeft.append(cardItemLeftXp, cardItemLeftSubXp)
@@ -95,48 +95,49 @@ controlItems.forEach((item, i) => {
 
 
 //region Getting data from jsonplaceholder
-// const requestUrl = 'https://jsonplaceholder.typicode.com/posts'
-//
-// function getData(url) {
-//     return fetch(url)
-//         .then(response => {
-//             if (response.ok) {
-//                 return response.json()
-//             }
-//         })
-// }
-//
-// getData(requestUrl)
-//     .then(data => {
-//         let resultObject,
-//             resultArr = [];
-//         setTimeout(() => {
-//             for (let item of data) {
-//                 resultObject = {
-//                     userId: item.userId,
-//                     postId: item.id,
-//                     title: item.title.slice(0, 15),
-//                     text: item.body.slice(0, 30)
-//                 }
-//                 resultArr.push(resultObject)
-//             }
-//
-//         }, 1000)
-//         return new Promise((resolve, reject) => {
-//             setTimeout(() => {
-//                 resolve(resultArr)
-//             }, 2000)
-//         })
-//     }).then(newData => {
-//     let counter = 10;
-//     for (let object of newData) {
-//         // console.log(counter, object.postId)
-//         if (Math.floor(object.postId % 10) === 9) {
-//             cardsWrapper.append(createCardNode(object))
-//             counter += 10
-//         }
-//     }
-// })
+const requestUrl = 'https://jsonplaceholder.typicode.com/posts'
+
+function getData(url) {
+    return fetch(url)
+        .then(response => {
+            if (response.ok) {
+                return response.json()
+            }
+        })
+}
+
+let cardsArr = []
+getData(requestUrl)
+    .then(data => {
+        let resultObject,
+            resultArr = [];
+        setTimeout(() => {
+            for (let item of data) {
+                resultObject = {
+                    userId: item.userId,
+                    taskId: item.id,
+                    title: item.title.slice(0, 15),
+                    text: item.body.slice(0, 30)
+                }
+                resultArr.push(resultObject)
+            }
+
+        }, 1000)
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(resultArr)
+            }, 2000)
+        })
+    }).then(newData => {
+    let counter = 10;
+    for (let object of newData) {
+        if (Math.floor(object.taskId % 10) === 9) {
+            cardsArr.push(object)
+            cardsWrapper.append(createCardNode(object))
+            counter += 10
+        }
+    }
+})
 //endregion
 
 //region Add interesting feature to user account view with charts js
@@ -269,8 +270,6 @@ function changeUserData(user) {
         userDataList[2].innerHTML = `Mail: <span>${user.user__email}</span>`
         userDataList[3].innerHTML = `Role: <span>just user</span>`
         userDataList[4].innerHTML = `Maximum Points: <span>0</span>`
-
-
     } else {
         userTitle.innerHTML = `<span>${user.username}</span>`
         userDataList[3].innerHTML = `Role: <span>Admin</span>`
@@ -302,6 +301,8 @@ lastBtn.addEventListener('click', () => {
         logout = true;
         controlAccountPage()
         restoreDefaultPage()
+    } else {
+        restoreDefaultPage()
     }
 })
 
@@ -329,7 +330,7 @@ modalWindow.addEventListener('click', (e) => {
     }
 })
 modalWindow.addEventListener('mouseover', (e) => {
-    if(e.target === modalWindow) {
+    if (e.target === modalWindow) {
         modalWindow.style.cursor = 'pointer'
     } else {
         modalWindow.style.cursor = 'initial'
@@ -337,11 +338,12 @@ modalWindow.addEventListener('mouseover', (e) => {
 })
 
 
-modalTexts[1].querySelector('span').addEventListener('click', ()=>{
+modalTexts[1].querySelector('span').addEventListener('click', () => {
     closeModalWindow()
     showAndHidePage(regForm, singInForm)
 
 })
+
 function createModal(info) {
     modalWindow.classList.add('modal-visible')
     modalWindow.classList.remove('modal-hidden')
@@ -362,18 +364,14 @@ loginBtn.addEventListener('click', () => {
         loginInputs[1].value = ''
         userLogged = true
         sessionStorage.setItem('userLogged', JSON.stringify(userLogged))
+        sessionStorage.setItem('user', JSON.stringify(checkThisUser))
         changeUserData(checkThisUser)
         controlAccountPage()
+        applyTask()
     } else {
-        console.log('works')
+        loginInputs[0].value = ''
+        loginInputs[1].value = ''
         createModal('info')
-        // let loginDefaultValue = loginLabels[0].innerHTML
-        // loginLabels[0].textContent = 'Неверный логин или пароль, поробуйте снова'
-        // loginLabels[0].classList.add('invalid__value')
-        // setTimeout(() => {
-        //     loginLabels[0].innerHTML = loginDefaultValue
-        //     loginLabels[0].classList.remove('invalid__value')
-        // }, 5000)
     }
 })
 
@@ -409,6 +407,7 @@ function CreateUser(...arguments) {
     this.user__number = arguments[3]
     this.user__email = arguments[4]
     this.points = 0
+    this.tasks = []
 }
 
 
@@ -621,3 +620,53 @@ for (let i = 0; i <= localStorage.length; i++) {
 }
 //endregion
 
+//region add hover to cards if user is logged
+function applyTask() {
+    const applyTaskBtn = document.createElement('a')
+    applyTaskBtn.classList.add('apply-task-btn')
+    applyTaskBtn.textContent = 'Apply'
+
+    if (JSON.parse(sessionStorage.getItem('userLogged'))) {
+        for (let card of cardsWrapper.childNodes) {
+            let taskNumber = card.querySelector('.card-item-left-sub-xp').textContent
+            let currentTask = Number(taskNumber.slice(13, taskNumber.length).trim())
+            let currentUser = JSON.parse(sessionStorage.getItem('user'))
+            let currentUserTasks = JSON.parse(localStorage.getItem(`${currentUser.id}`)).tasks
+            let taskIsTaken = false
+            for (let taskNumber of currentUserTasks) {
+                if(taskNumber === currentTask) {
+                    taskIsTaken = true
+                    card.style.background = 'linear-gradient(to bottom, #274d72, #4d4d84, #7d4485)'
+                    break
+                }
+            }
+            if (!taskIsTaken) {
+                card.addEventListener('mouseover', () => {
+                    card.appendChild(applyTaskBtn)
+                })
+
+                card.addEventListener('mouseleave', () => {
+                    card.removeChild(applyTaskBtn)
+                })
+                card.addEventListener('click', (e) => {
+                    if (e.target === applyTaskBtn) {
+
+                        for (let obj of cardsArr) {
+                            if (obj.taskId === currentTask) {
+                                currentUser.tasks.push(currentTask)
+                                sessionStorage.setItem('user', JSON.stringify(currentUser))
+                                localStorage.setItem(`${currentUser.id}`, JSON.stringify(currentUser))
+                                break
+                            }
+                        }
+                        card.style.opacity = '0.1'
+                        setTimeout(() => {
+                            card.style.opacity = '1'
+                            card.style.background = 'linear-gradient(to bottom, #274d72, #4d4d84, #7d4485)'
+                        }, 500)
+                    }
+                })
+            }
+        }
+    }
+}

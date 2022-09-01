@@ -315,6 +315,7 @@ header {
   flex-wrap: wrap;
 }
 .cards .card-item {
+  position: relative;
   border-radius: 10px;
   padding: 20px;
   background: linear-gradient(10.22deg, #274D72 6.74%, rgba(39, 77, 114, 0.2) 120.6%);
@@ -322,6 +323,7 @@ header {
   height: 160px;
   display: flex;
   margin-bottom: 10px;
+  transition: 0.5s;
 }
 .cards .card-item-right {
   flex: 1 1 70%;
@@ -364,6 +366,27 @@ header {
   line-height: 16px;
   color: #ffffff;
   opacity: 0.5;
+}
+
+.apply-task-btn {
+  padding: 8px;
+  background-color: #c42f4c;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.user__logged {
+  display: none;
 }
 
 .user__path {
