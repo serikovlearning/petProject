@@ -198,7 +198,11 @@ const myChart = new Chart(ctx, {
 //region Sign up and registration logic will be down
 let userLogged = false,
     logout = false;
-sessionStorage.setItem('userLogged', JSON.stringify(userLogged))
+
+function checkUserLogged() {
+    console.log(Boolean(JSON.parse(sessionStorage.getItem('user'))))
+    return Boolean(JSON.parse(sessionStorage.getItem('user')))
+}
 
 const regForm = document.querySelector('.registration__form'),
     userLoggedPage = document.querySelector('.user__logged'),
@@ -231,16 +235,16 @@ showAndHidePage = (showPage, hidePage) => {
 }
 
 const controlAccountPage = () => {
-    let checkLogged = JSON.parse(sessionStorage.getItem('userLogged'))
-    if (!checkLogged) {
+    let userLogged = checkUserLogged()
+    if (!userLogged) {
         userLoggedPage.style.display = 'none'
         if (regForm.style.display === 'block') {
             showAndHidePage(singInForm, regForm)
         }
-        if (userLoggedPage.style.display === 'none' && !checkLogged && logout) {
+        if (userLoggedPage.style.display === 'none' && !userLogged && logout) {
             showAndHidePage(singInForm, userLoggedPage)
         }
-    } else if (checkLogged) {
+    } else if (userLogged) {
         showAndHidePage(userLoggedPage, singInForm)
         // regForm.style.display = 'none'
         // userLoggedPage.style.display = 'block'
@@ -296,11 +300,12 @@ lastBtn.addEventListener('click', () => {
             topUserBtn.textContent = `JavaScript`
             lastBtn.innerHTML = '<ion-icon name="home-outline" class="home_btn"></ion-icon>'
         }, 400)
-        userLogged = false
-        sessionStorage.setItem('userLogged', JSON.stringify(userLogged))
+        sessionStorage.removeItem('user')
         logout = true;
         controlAccountPage()
         restoreDefaultPage()
+        restoreCards()
+        applyTask()
     } else {
         restoreDefaultPage()
     }
@@ -324,7 +329,6 @@ function closeModalWindow() {
 }
 
 modalWindow.addEventListener('click', (e) => {
-    console.log(e.target)
     if (e.target === modalWindow || e.target === modalCloseBtn) {
         closeModalWindow()
     }
@@ -362,9 +366,8 @@ loginBtn.addEventListener('click', () => {
         // showAndHidePage(userLoggedPage, singInForm)
         loginInputs[0].value = ''
         loginInputs[1].value = ''
-        userLogged = true
-        sessionStorage.setItem('userLogged', JSON.stringify(userLogged))
         sessionStorage.setItem('user', JSON.stringify(checkThisUser))
+        logout = false
         changeUserData(checkThisUser)
         controlAccountPage()
         applyTask()
@@ -381,6 +384,7 @@ const simpleAdmin = {
     password: 'admin',
     role: 'admin'
 }
+
 localStorage.setItem('0', JSON.stringify(simpleAdmin))
 let newUser;
 //endregion
@@ -619,49 +623,82 @@ for (let i = 0; i <= localStorage.length; i++) {
     usersList.push(user)
 }
 //endregion
-let currentUserTasks = []
+// let currentUserTasks = []
+
+function changeCardColor(cardToChange, clear) {
+    cardToChange.style.opacity = '0'
+    setTimeout(() => {
+        if (clear) {
+            cardToChange.style.background = 'linear-gradient(10.22deg, #274D72 6.74%, rgba(39, 77, 114, 0.2) 120.6%)'
+        } else {
+            cardToChange.style.background = 'linear-gradient(to bottom, #274d72, #4d4d84, #7d4485)'
+        }
+    }, 333)
+    setTimeout(() => {
+        cardToChange.style.opacity = '1'
+    }, 888)
+}
+
 //region add hover to cards if user is logged
 function applyTask() {
     const applyTaskBtn = document.createElement('a')
     applyTaskBtn.classList.add('apply-task-btn')
     applyTaskBtn.textContent = 'Apply'
-    userLogged = JSON.parse(sessionStorage.getItem('userLogged'))
-    if (userLogged) {
-        for (let card of cardsWrapper.childNodes) {
-            let currentUser = JSON.parse(sessionStorage.getItem('user'))
-            if (currentUser.role !== 'admin') {
-                card.addEventListener('mouseover', () => {
-                    card.appendChild(applyTaskBtn)
-                })
 
-                card.addEventListener('mouseleave', () => {
-                    card.removeChild(applyTaskBtn)
-                })
-                card.addEventListener('click', (e) => {
-                    if (e.target === applyTaskBtn) {
-                        let taskNumber = card.querySelector('.card-item-left-sub-xp').textContent
-                        let currentTask = Number(taskNumber.slice(13, taskNumber.length).trim())
-                        card.style.opacity = '0.1'
-                        setTimeout(()=>{
-                            // card.style.display = 'none'
-                        }, 666)
-                        setTimeout(()=> {
-                            card.style.opacity = '1'
-                        }, 888)
-                        setTimeout(()=>{
-                            // card.style.display = 'flex'
-                        },1333)
-                        for (let obj of cardsArr) {
-                            if (obj.taskId === currentTask) {
-                                currentUser.tasks.push(currentTask)
-                                sessionStorage.setItem('user', JSON.stringify(currentUser))
-                                localStorage.setItem(`${currentUser.id}`, JSON.stringify(currentUser))
-                                break
+    if (checkUserLogged()) {
+        for (let i = 1; i < cardsWrapper.childNodes.length; i++) {
+            let card = cardsWrapper.childNodes[i]
+            if (card !== undefined && card.classList.contains('card-item')) {
+                let currentUser = JSON.parse(sessionStorage.getItem('user'))
+                let taskNumber = card.querySelector('.card-item-left-sub-xp').textContent
+                let currentTask = Number(taskNumber.slice(13, taskNumber.length).trim())
+                let cardIsTaken = currentUser.tasks.includes(currentTask)
+                // console.log(currentUser.tasks)
+                if (cardIsTaken && currentUser.role !== 'admin') {
+                    // for (let child of card.childNodes) {
+                    //     if (child === applyTaskBtn && cardIsTaken) {
+                    //         card.removeChild(child)
+                    //     }
+                    // }
+                    changeCardColor(card, false)
+                }
+                if (!cardIsTaken && currentUser.role !== 'admin') {
+                    card.addEventListener('mouseover', () => {
+                        if (!cardIsTaken) {
+                            card.appendChild(applyTaskBtn)
+                        }
+                    })
+                    card.addEventListener('mouseleave', () => {
+                        card.removeChild(applyTaskBtn)
+                    })
+                    card.addEventListener('click', (e) => {
+                        if (e.target === applyTaskBtn) {
+                            changeCardColor(card, false)
+                            for (let obj of cardsArr) {
+                                if (obj.taskId === currentTask) {
+                                    currentUser.tasks.push(currentTask)
+                                    sessionStorage.setItem('user', JSON.stringify(currentUser))
+                                    localStorage.setItem(`${currentUser.id}`, JSON.stringify(currentUser))
+
+                                    break
+                                }
+                                applyTask()
                             }
                         }
-                    }
-                })
+                    })
+                }
             }
         }
     }
 }
+
+function restoreCards() {
+    if (!checkUserLogged()) {
+        for (let i = 1; i < cardsWrapper.childNodes.length; i++) {
+            let card = cardsWrapper.childNodes[i]
+            changeCardColor(card, true)
+        }
+    }
+}
+
+sessionStorage.clear()
