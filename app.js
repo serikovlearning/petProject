@@ -619,28 +619,17 @@ for (let i = 0; i <= localStorage.length; i++) {
     usersList.push(user)
 }
 //endregion
-
+let currentUserTasks = []
 //region add hover to cards if user is logged
 function applyTask() {
     const applyTaskBtn = document.createElement('a')
     applyTaskBtn.classList.add('apply-task-btn')
     applyTaskBtn.textContent = 'Apply'
-
-    if (JSON.parse(sessionStorage.getItem('userLogged'))) {
+    userLogged = JSON.parse(sessionStorage.getItem('userLogged'))
+    if (userLogged) {
         for (let card of cardsWrapper.childNodes) {
-            let taskNumber = card.querySelector('.card-item-left-sub-xp').textContent
-            let currentTask = Number(taskNumber.slice(13, taskNumber.length).trim())
             let currentUser = JSON.parse(sessionStorage.getItem('user'))
-            let currentUserTasks = JSON.parse(localStorage.getItem(`${currentUser.id}`)).tasks
-            let taskIsTaken = false
-            for (let taskNumber of currentUserTasks) {
-                if(taskNumber === currentTask) {
-                    taskIsTaken = true
-                    card.style.background = 'linear-gradient(to bottom, #274d72, #4d4d84, #7d4485)'
-                    break
-                }
-            }
-            if (!taskIsTaken) {
+            if (currentUser.role !== 'admin') {
                 card.addEventListener('mouseover', () => {
                     card.appendChild(applyTaskBtn)
                 })
@@ -650,7 +639,18 @@ function applyTask() {
                 })
                 card.addEventListener('click', (e) => {
                     if (e.target === applyTaskBtn) {
-
+                        let taskNumber = card.querySelector('.card-item-left-sub-xp').textContent
+                        let currentTask = Number(taskNumber.slice(13, taskNumber.length).trim())
+                        card.style.opacity = '0.1'
+                        setTimeout(()=>{
+                            // card.style.display = 'none'
+                        }, 666)
+                        setTimeout(()=> {
+                            card.style.opacity = '1'
+                        }, 888)
+                        setTimeout(()=>{
+                            // card.style.display = 'flex'
+                        },1333)
                         for (let obj of cardsArr) {
                             if (obj.taskId === currentTask) {
                                 currentUser.tasks.push(currentTask)
@@ -659,11 +659,6 @@ function applyTask() {
                                 break
                             }
                         }
-                        card.style.opacity = '0.1'
-                        setTimeout(() => {
-                            card.style.opacity = '1'
-                            card.style.background = 'linear-gradient(to bottom, #274d72, #4d4d84, #7d4485)'
-                        }, 500)
                     }
                 })
             }
