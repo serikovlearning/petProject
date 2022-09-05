@@ -53,20 +53,33 @@ menuItems.forEach((item, index) => {
                 menuItems[i].classList.remove('active')
             }
         }
-        contentSections[0].style.transform = `translateX(100%)`
-
-
-        if (index === 0) {
+        let transformLength = (index + 1) * 100
+        if (checkUserLogged()) {
+            contentSections[0].style.transform = `translateX(${transformLength}%)`
+            document.querySelector('body').style.overflowY = 'hidden'
+            if (index === 0) {
+                controlAccountPage()
+                contentSections[1].style.transform = `translateX(-${transformLength}%)`
+                contentSections[2].style.transform = `translateX(-300%)`
+            } else if (index === 1) {
+                contentSections[2].style.transform = `translateX(-${transformLength}%)`
+                contentSections[1].style.transform = `translateX(-200%)`
+            }
+        } else {
+            contentSections[0].style.transform = `translateX(100%)`
             controlAccountPage()
             contentSections[1].style.transform = `translateX(-100%)`
         }
+
     })
 })
 
 // Nav logo restore default page
 function restoreDefaultPage() {
+    document.querySelector('body').style.overflowY = 'auto'
     contentSections[0].style.transform = `translateX(0)`
     contentSections[1].style.transform = `translateX(-200%)`
+    contentSections[2].style.transform = `translateX(-300%)`
     if (singInForm.style.display !== 'block' && !userLogged) {
         showAndHidePage(singInForm, regForm)
     }
@@ -778,4 +791,58 @@ function restoreCards() {
     }
 }
 
+
 sessionStorage.clear()
+let rndUsr = localStorage.getItem('2')
+sessionStorage.setItem('user', rndUsr)
+
+//region slider
+
+const userTasksPage = document.querySelector('.user__tasks-wrapper'),
+    slider = userTasksPage.querySelector('.slider__wrapper'),
+    sliderLeftBtn = userTasksPage.querySelector('.slide-left'),
+    sliderRightBtn = userTasksPage.querySelector('.slide-right'),
+    userTasksCards = userTasksPage.querySelectorAll('.user__task-card')
+
+let commonCardWidth = (parseFloat(userTasksCards[0].clientWidth) + 50) / 2
+let translateNum = 0
+let indexActive = translateNum / commonCardWidth
+userTasksCards[0].classList.add('active')
+sliderRightBtn.addEventListener('click', () => {
+    if (indexActive <= userTasksCards.length - 2) {
+        translateNum -= commonCardWidth
+        indexActive += 1
+        console.log(translateNum, 'width')
+        console.log(indexActive)
+        for (let card of userTasksCards) {
+            if (card !== undefined) {
+                card.classList.remove('active')
+            }
+        }
+        userTasksCards[indexActive].classList.add('active')
+        slider.style.transform = `translateX(${translateNum}px)`
+    }
+})
+
+
+sliderLeftBtn.addEventListener('click', () => {
+    if (translateNum < 0) {
+        translateNum += commonCardWidth
+        indexActive -= indexActive > 0 ? 1 : 0
+        console.log(indexActive)
+        console.log(translateNum, 'width')
+        for (let card of userTasksCards) {
+            if (card !== undefined) {
+                card.classList.remove('active')
+            }
+        }
+        if (indexActive >= 0) {
+            userTasksCards[indexActive].classList.add('active')
+            slider.style.transform = `translateX(${translateNum}px)`
+        }
+    }
+})
+
+// function CreateUserTasks() {
+//     this.
+// }

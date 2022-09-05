@@ -29,6 +29,9 @@ body {
 .content__wrapper .account-content {
   transform: translateX(-200%);
 }
+.content__wrapper .user__tasks-content {
+  transform: translateX(-300%);
+}
 
 nav {
   position: fixed;
@@ -602,6 +605,108 @@ header {
 .modal-hidden {
   display: none;
   opacity: 0.1;
+}
+
+.user__tasks-wrapper {
+  margin-top: 50px;
+  height: 80vh;
+  position: relative;
+}
+.user__tasks-wrapper .user__tasks-title {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 29px;
+  color: #ffffff;
+  margin-bottom: 40px;
+}
+.user__tasks-wrapper .slide-btn {
+  font-size: 36px;
+  color: white;
+  position: absolute;
+  z-index: 100;
+  top: 50%;
+  cursor: pointer;
+}
+.user__tasks-wrapper .slide-left {
+  left: 0;
+}
+.user__tasks-wrapper .slide-right {
+  right: -60px;
+}
+.user__tasks-wrapper .active {
+  flex-basis: 45%;
+}
+
+.slider {
+  width: 90%;
+  height: 100%;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.slider__wrapper {
+  width: 90%;
+  margin: 0 auto;
+  position: relative;
+  height: 80%;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 30px;
+  transition: 0.5s linear;
+}
+.slider__wrapper .user__task-card {
+  flex-shrink: 0;
+  width: 30%;
+  height: 80%;
+  background: linear-gradient(to bottom, #274d72, #4d4d84, #7d4485);
+  padding: 30px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.31);
+}
+.slider__wrapper .user__task-card .user__task-title {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 22px;
+  color: #ffffff;
+  margin-bottom: 40px;
+  text-shadow: 5px 5px 15px #c42f4c;
+}
+.slider__wrapper .user__task-card .user__task-text {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  text-align: center;
+  line-height: 24px;
+  color: #ffffff;
+}
+.slider__wrapper .user__task-card .user__task-btn {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  color: #ffffff;
+  padding: 15px;
+  border: 1px solid #2D98FF;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  transition: 0.5s ease-in-out;
+  box-shadow: 5px 5px 50px -20px white;
+  opacity: 0.3;
+}
+.slider__wrapper .user__task-card .user__task-btn:hover {
+  border: none;
+  box-shadow: 5px 5px 50px -10px white;
+  background: #c42f4c;
+  opacity: 0.88;
 }
 
 /*# sourceMappingURL=style.css.map */
