@@ -669,6 +669,7 @@ header {
   justify-content: space-around;
   align-items: center;
   box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.31);
+  transition: 0.4s ease-in-out;
 }
 .slider__wrapper .user__task-card .user__task-title {
   font-style: normal;
@@ -677,7 +678,7 @@ header {
   line-height: 22px;
   color: #ffffff;
   margin-bottom: 40px;
-  text-shadow: 5px 5px 15px #c42f4c;
+  text-shadow: 5px 5px 20px rgba(0, 0, 0, 0.31);
 }
 .slider__wrapper .user__task-card .user__task-text {
   font-style: normal;
@@ -687,6 +688,15 @@ header {
   line-height: 24px;
   color: #ffffff;
 }
+.slider__wrapper .user__task-card span {
+  color: #2D98FF;
+  text-shadow: 5px 5px 20px rgba(0, 0, 0, 0.51);
+}
+.slider__wrapper .user__task-card .task__number {
+  color: #c42f4c;
+  font-size: 18px;
+  text-shadow: 5px 5px 20px rgba(0, 0, 0, 0.51);
+}
 .slider__wrapper .user__task-card .user__task-btn {
   font-style: normal;
   font-weight: 600;
@@ -695,6 +705,7 @@ header {
   text-align: center;
   color: #ffffff;
   padding: 15px;
+  margin-top: 20px;
   border: 1px solid #2D98FF;
   border-radius: 10px;
   margin-bottom: 20px;
