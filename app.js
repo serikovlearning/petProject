@@ -369,7 +369,8 @@ loginBtn.addEventListener('click', () => {
         logout = false
         changeUserData(checkThisUser)
         controlAccountPage()
-        applyTask(true)
+        addTaskToCard()
+        // applyTask(true)
     } else {
         loginInputs[0].value = ''
         loginInputs[1].value = ''
@@ -651,76 +652,128 @@ function checkCardIsTaken(card) {
 const applyTaskBtn = document.createElement('a')
 applyTaskBtn.classList.add('apply-task-btn')
 applyTaskBtn.textContent = 'Apply'
+//
+// function applyTask(firstCall) {
+//     // userLogged = checkUserLogged()
+//
+//     let currentUser = JSON.parse(sessionStorage.getItem('user'))
+//     let takenCards = [];
+//
+//     function cardActions(firstCall) {
+//         if (checkUserLogged() && currentUser.role !== 'admin') {
+//
+//
+//             for (let i = 1; i < cardsWrapper.childNodes.length; i++) {
+//                 let card = cardsWrapper.childNodes[i]
+//                 let taskNumber = card.querySelector('.card-item-left-sub-xp').textContent
+//                 let currentTask = Number(taskNumber.slice(13, taskNumber.length).trim())
+//                 let cardIsTaken = checkCardIsTaken(card)
+//
+//                 if (cardIsTaken && !takenCards.includes(card)) {
+//                     takenCards.push(card)
+//                     if (firstCall) {
+//                         changeCardColor(card)
+//                     }
+//                 }
+//                 if (!takenCards.includes(card)) {
+//                     card.addEventListener('mouseover', (e) => {
+//                         if (!takenCards.includes(card)) {
+//                             card.appendChild(applyTaskBtn)
+//                         }
+//                     })
+//
+//                     card.addEventListener('mouseleave', () => {
+//                         if (card !== null && card.contains(applyTaskBtn)) {
+//                             card.removeChild(applyTaskBtn)
+//                         }
+//                     })
+//                     card.addEventListener('click', (e) => {
+//                         if (e.target === applyTaskBtn) {
+//                             card = e.target.parentNode
+//                             // card.removeChild(applyTaskBtn)
+//                             for (let obj of cardsArr) {
+//                                 if (obj.taskId === currentTask) {
+//                                     changeCardColor(card, false)
+//                                     currentUser.tasks.push(currentTask)
+//                                     sessionStorage.setItem('user', JSON.stringify(currentUser))
+//                                     localStorage.setItem(`${currentUser.id}`, JSON.stringify(currentUser))
+//                                     break
+//                                 }
+//                             }
+//                             takenCards.push(card)
+//                             changeCardColor(card, false)
+//                             cardActions(false)
+//                         }
+//                     })
+//                 }
+//             }
+//         }
+//     }
+//     cardActions(firstCall)
+// }
 
-function applyTask(firstCall) {
-
-    // userLogged = checkUserLogged()
-
+function addTaskToCard() {
     let currentUser = JSON.parse(sessionStorage.getItem('user'))
-    let takenCards = [];
+    for (let i = 1; i < cardsWrapper.childNodes.length; i++) {
+        let card = cardsWrapper.childNodes[i]
+        let taskNumber = card.querySelector('.card-item-left-sub-xp').textContent,
+            currentTaskNumber = Number(taskNumber.slice(13, taskNumber.length).trim()),
+            cardIsTaken = currentUser.tasks.includes(currentTaskNumber)
+        if (cardIsTaken) {
+            changeCardColor(card, false)
+        }
 
-    (function cardActions(firstCall) {
-        if (checkUserLogged() && currentUser.role !== 'admin') {
+    }
 
-
+    cardsWrapper.addEventListener('mouseover', (event) => {
+        if (checkUserLogged()) {
             for (let i = 1; i < cardsWrapper.childNodes.length; i++) {
                 let card = cardsWrapper.childNodes[i]
-                let taskNumber = card.querySelector('.card-item-left-sub-xp').textContent
-                let currentTask = Number(taskNumber.slice(13, taskNumber.length).trim())
-                let cardIsTaken = checkCardIsTaken(card)
-
-                if (cardIsTaken && !takenCards.includes(card)) {
-                    takenCards.push(card)
-                    if (firstCall) {
-                        changeCardColor(card)
-                    }
-                }
-                if (!takenCards.includes(card)) {
-                    card.addEventListener('mouseover', (e) => {
-                        if (!takenCards.includes(card)) {
-                            card.appendChild(applyTaskBtn)
-                        }
-                    })
-
-                    card.addEventListener('mouseleave', () => {
-                        if (card !== null && card.contains(applyTaskBtn)) {
-                            card.removeChild(applyTaskBtn)
-                        }
-                    })
-                    card.addEventListener('click', (e) => {
-                        if (e.target === applyTaskBtn) {
-                            card = e.target.parentNode
-                            // card.removeChild(applyTaskBtn)
-                            for (let obj of cardsArr) {
-                                if (obj.taskId === currentTask) {
-                                    changeCardColor(card, false)
-                                    currentUser.tasks.push(currentTask)
-                                    sessionStorage.setItem('user', JSON.stringify(currentUser))
-                                    localStorage.setItem(`${currentUser.id}`, JSON.stringify(currentUser))
-                                    break
-                                }
+                if (event.target === card) {
+                    let taskNumber = card.querySelector('.card-item-left-sub-xp').textContent,
+                        currentTaskNumber = Number(taskNumber.slice(13, taskNumber.length).trim())
+                    let cardIsTaken = currentUser.tasks.includes(currentTaskNumber)
+                    if (!cardIsTaken) {
+                        event.target.appendChild(applyTaskBtn)
+                        event.target.addEventListener('mouseleave', () => {
+                            if (event.target.contains(applyTaskBtn)) {
+                                event.target.removeChild(applyTaskBtn)
                             }
-                            takenCards.push(card)
-                            changeCardColor(card, false)
-                            cardActions(false)
-                        }
-                    })
+                        })
+                    }
                 }
             }
         }
-    })(firstCall)
+    })
+    cardsWrapper.addEventListener('click', (event) => {
+        if (checkUserLogged()) {
+            for (let i = 1; i < cardsWrapper.childNodes.length; i++) {
+                let card = cardsWrapper.childNodes[i]
+                if (event.target === applyTaskBtn && card.contains(event.target)) {
+                    let taskNumber = event.target.parentNode.querySelector('.card-item-left-sub-xp').textContent,
+                        currentTaskNumber = Number(taskNumber.slice(13, taskNumber.length).trim())
+
+                    currentUser.tasks.push(currentTaskNumber)
+                    sessionStorage.setItem('user', JSON.stringify(currentUser))
+                    localStorage.setItem(`${currentUser.id}`, JSON.stringify(currentUser))
+                    let cardIsTaken = currentUser.tasks.includes(currentTaskNumber)
+                    if (cardIsTaken) {
+                        changeCardColor(card)
+                    }
+                    console.log()
+                }
+            }
+        }
+    })
+
 }
+
 
 function restoreCards() {
     if (!checkUserLogged()) {
         for (let i = 1; i < cardsWrapper.childNodes.length; i++) {
             let card = cardsWrapper.childNodes[i]
-            // console.log(card.childNodes)
-            // if (card.childNodes.contains(applyTaskBtn))
             changeCardColor(card, true)
-            // card.removeEventListener('click', () => {})
-            // card.removeEventListener('mouseover', () => {})
-            // card.removeEventListener('mouseleave', () => {})
         }
     }
 }
