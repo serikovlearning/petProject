@@ -47,6 +47,7 @@ function createCardNode(cardData) {
 menuItems.forEach((item, index) => {
     item.addEventListener('click', () => {
         item.classList.add('active')
+        document.querySelector('body').style.overflowY = 'hidden'
         for (let i = 0; i < menuItems.length; i++) {
             if (i !== index) {
                 menuItems[i].classList.remove('active')
@@ -55,7 +56,7 @@ menuItems.forEach((item, index) => {
         let transformLength = (index + 1) * 100
         if (checkUserLogged()) {
             contentSections[0].style.transform = `translateX(${transformLength}%)`
-            document.querySelector('body').style.overflowY = 'hidden'
+
             if (index === 0) {
                 controlAccountPage()
                 contentSections[1].style.transform = `translateX(-${transformLength}%)`

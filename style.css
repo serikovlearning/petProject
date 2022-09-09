@@ -205,7 +205,7 @@ header {
 .language-text {
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 17px;
   color: #ffffff;
 }
@@ -244,8 +244,8 @@ header {
 .content-part-text {
   font-style: normal;
   font-weight: 400;
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 16px;
+  line-height: 22px;
   color: #ffffff;
   text-align: justify;
 }
@@ -258,7 +258,7 @@ header {
 .content-part footer h4 {
   font-style: normal;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 20px;
   color: #ffffff;
 }
@@ -342,7 +342,7 @@ header {
 .cards .card-item-right-text {
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 17px;
   color: #ffffff;
 }
@@ -712,6 +712,7 @@ header {
   transition: 0.5s ease-in-out;
   box-shadow: 5px 5px 50px -20px white;
   opacity: 0.3;
+  cursor: pointer;
 }
 .slider__wrapper .user__task-card .user__task-btn:hover {
   border: none;
