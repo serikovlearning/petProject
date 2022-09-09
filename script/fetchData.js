@@ -8,7 +8,8 @@ function getData(url) {
             }
         })
 }
-
+const loader = document.querySelector('.loader')
+let allShowedCardsNode;
 let cardsArr = []
 getData(requestUrl)
     .then(data => {
@@ -40,4 +41,12 @@ getData(requestUrl)
             counter += 10
         }
     }
+    allShowedCardsNode = cardsWrapper.innerHTML
+    cardsLoaded = true
+    menuControlFunction()
+    loader.style.opacity = '0'
+    setTimeout(() => {
+        loader.style.display = `none`
+    }, 510)
+
 })

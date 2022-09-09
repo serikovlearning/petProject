@@ -16,6 +16,10 @@
 </head>
 <body>
 
+<div class="loader">
+  <span class="loader-item"></span>
+</div>
+
 <nav>
   <a href="#" class="logo">
     <ion-icon name="logo-nodejs" class="nav-logo"></ion-icon>
@@ -112,10 +116,9 @@
         <hr class="controls-hr">
       </div>
 
-      <section class="cards container">
-        <h1 class="cards-title">TASK</h1>
-        <div class="cards-wrapper">
-
+      <section class="main-info container">
+        <h1 class="main-info-title">TASK</h1>
+        <div class="main-info-wrapper">
         </div>
 
       </section>
@@ -168,7 +171,7 @@
             <h3 class="main__info-text">Phone: </h3>
             <h3 class="main__info-text">Mail: </h3>
             <h3 class="main__info-text">Role: </h3>
-            <h3 class="main__info-text">Maximum Points: </h3>
+            <h3 class="main__info-text">Points: </h3>
           </div>
         </div>
         <div class="user__activity">
@@ -214,5 +217,6 @@
 <script defer src="script/applyTask.js"></script>
 <script defer src="script/auth.js"></script>
 <script defer src="script/fetchData.js"></script>
+<script defer src="script/leaderboardCreate.js"></script>
 </body>
 </html>

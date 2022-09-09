@@ -3,59 +3,57 @@ applyTaskBtn.classList.add('apply-task-btn')
 applyTaskBtn.textContent = 'Apply'
 
 function addTaskToCard() {
-    let currentUser = JSON.parse(sessionStorage.getItem('user'))
-    for (let i = 1; i < cardsWrapper.childNodes.length; i++) {
-        let card = cardsWrapper.childNodes[i]
-        let taskNumber = card.querySelector('.card-item-left-sub-xp').textContent,
-            currentTaskNumber = Number(taskNumber.slice(13, taskNumber.length).trim()),
-            cardIsTaken = currentUser.tasks.includes(currentTaskNumber)
-        if (cardIsTaken) {
-            changeCardColor(card, false)
+    if (checkUserLogged()) {
+        let currentUser = JSON.parse(sessionStorage.getItem('user'))
+        for (let i = 1; i < cardsWrapper.childNodes.length; i++) {
+            let card = cardsWrapper.childNodes[i]
+            let taskNumber = card.querySelector('.card-item-left-sub-xp').textContent,
+                currentTaskNumber = Number(taskNumber.slice(13, taskNumber.length).trim()),
+                cardIsTaken = currentUser.tasks.includes(currentTaskNumber)
+            if (cardIsTaken) {
+                changeCardColor(card, false)
+            }
         }
+        cardsWrapper.addEventListener('mouseover', (event) => {
+            if (checkUserLogged()) {
+                for (let i = 1; i < cardsWrapper.childNodes.length; i++) {
+                    let card = cardsWrapper.childNodes[i]
+                    if (event.target === card) {
+                        let taskNumber = card.querySelector('.card-item-left-sub-xp').textContent,
+                            currentTaskNumber = Number(taskNumber.slice(13, taskNumber.length).trim())
+                        let cardIsTaken = currentUser.tasks.includes(currentTaskNumber)
+                        if (!cardIsTaken) {
+                            event.target.appendChild(applyTaskBtn)
+                            event.target.addEventListener('mouseleave', () => {
+                                if (event.target.contains(applyTaskBtn)) {
+                                    event.target.removeChild(applyTaskBtn)
+                                }
+                            })
+                        }
+                    }
+                }
+            }
+        })
+        cardsWrapper.addEventListener('click', (event) => {
+            if (checkUserLogged()) {
+                for (let i = 1; i < cardsWrapper.childNodes.length; i++) {
+                    let card = cardsWrapper.childNodes[i]
+                    if (event.target === applyTaskBtn && card.contains(event.target)) {
+                        let taskNumber = event.target.parentNode.querySelector('.card-item-left-sub-xp').textContent,
+                            currentTaskNumber = Number(taskNumber.slice(13, taskNumber.length).trim())
 
+                        currentUser.tasks.push(currentTaskNumber)
+                        sessionStorage.setItem('user', JSON.stringify(currentUser))
+                        localStorage.setItem(`${currentUser.id}`, JSON.stringify(currentUser))
+                        let cardIsTaken = currentUser.tasks.includes(currentTaskNumber)
+                        if (cardIsTaken) {
+                            changeCardColor(card)
+                        }
+                    }
+                }
+            }
+        })
     }
-
-    cardsWrapper.addEventListener('mouseover', (event) => {
-        if (checkUserLogged()) {
-            for (let i = 1; i < cardsWrapper.childNodes.length; i++) {
-                let card = cardsWrapper.childNodes[i]
-                if (event.target === card) {
-                    let taskNumber = card.querySelector('.card-item-left-sub-xp').textContent,
-                        currentTaskNumber = Number(taskNumber.slice(13, taskNumber.length).trim())
-                    let cardIsTaken = currentUser.tasks.includes(currentTaskNumber)
-                    if (!cardIsTaken) {
-                        event.target.appendChild(applyTaskBtn)
-                        event.target.addEventListener('mouseleave', () => {
-                            if (event.target.contains(applyTaskBtn)) {
-                                event.target.removeChild(applyTaskBtn)
-                            }
-                        })
-                    }
-                }
-            }
-        }
-    })
-    cardsWrapper.addEventListener('click', (event) => {
-        if (checkUserLogged()) {
-            for (let i = 1; i < cardsWrapper.childNodes.length; i++) {
-                let card = cardsWrapper.childNodes[i]
-                if (event.target === applyTaskBtn && card.contains(event.target)) {
-                    let taskNumber = event.target.parentNode.querySelector('.card-item-left-sub-xp').textContent,
-                        currentTaskNumber = Number(taskNumber.slice(13, taskNumber.length).trim())
-
-                    currentUser.tasks.push(currentTaskNumber)
-                    sessionStorage.setItem('user', JSON.stringify(currentUser))
-                    localStorage.setItem(`${currentUser.id}`, JSON.stringify(currentUser))
-                    let cardIsTaken = currentUser.tasks.includes(currentTaskNumber)
-                    if (cardIsTaken) {
-                        changeCardColor(card)
-                    }
-                    console.log()
-                }
-            }
-        }
-    })
-
 }
 
 

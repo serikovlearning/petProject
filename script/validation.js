@@ -22,6 +22,24 @@ function CreateUser(...args) {
     this.tasks = []
 }
 
+const addedUsers = []
+const randomUser1 = new CreateUser('user', 'user', 'user', 8777777777, 'example@gmail.com')
+randomUser1.points = getRandomArbitrary(0, 20)
+const randomUser2 = new CreateUser('user1', 'user1', 'user1', 8777777777, 'example@gmail.com')
+randomUser2.points = getRandomArbitrary(0, 20)
+const randomUser3 = new CreateUser('example', 'example', 'example', 8777777777, 'example@gmail.com')
+randomUser3.points = getRandomArbitrary(0, 20)
+const randomUser4 = new CreateUser('superHero', 'superHero', 'superHero', 8777777777, 'example@gmail.com')
+randomUser4.points = getRandomArbitrary(0, 20)
+const randomUser5 = new CreateUser('serikovlearning', 'secret', 'Сериков Егор', 8777777777, 'egorfaresto@gmail.com')
+randomUser5.points = getRandomArbitrary(20, 100)
+
+addedUsers.push(randomUser1, randomUser2, randomUser3, randomUser4, randomUser5)
+addedUsers.forEach((user, index) => {
+    if (localStorage.length <= 5) {
+        localStorage.setItem(`${localStorage.length++}`, JSON.stringify(user))
+    }
+})
 
 let textUsername = labels[0].innerHTML,
     textTel = labels[3].innerHTML,
@@ -230,3 +248,4 @@ for (let i = 0; i <= localStorage.length; i++) {
     let user = JSON.parse(localStorage.getItem(`${i}`));
     usersList.push(user)
 }
+

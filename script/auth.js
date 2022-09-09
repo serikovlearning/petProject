@@ -70,7 +70,7 @@ function changeUserData(user) {
         userDataList[1].innerHTML = `Phone: <span>${user.user__number}</span>`
         userDataList[2].innerHTML = `Mail: <span>${user.user__email}</span>`
         userDataList[3].innerHTML = `Role: <span>just user</span>`
-        userDataList[4].innerHTML = `Maximum Points: <span>0</span>`
+        userDataList[4].innerHTML = `Points: <span>${user.points}</span>`
     } else {
         userTitle.innerHTML = `<span>${user.username}</span>`
         userDataList[3].innerHTML = `Role: <span>Admin</span>`
@@ -175,11 +175,4 @@ loginBtn.addEventListener('click', () => {
 })
 
 
-const simpleAdmin = {
-    username: 'admin',
-    password: 'admin',
-    role: 'admin'
-}
-
-localStorage.setItem('0', JSON.stringify(simpleAdmin))
 let newUser;

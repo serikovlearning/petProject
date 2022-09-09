@@ -9,7 +9,7 @@ function qSort(array) {
         for (let i = 1; i < array.length; i++) {
             if (array[i] <= pivot) {
                 less.push(array[i])
-            } else if (array[i]> pivot) {
+            } else if (array[i] > pivot) {
                 greater.push(array[i])
             }
         }
@@ -19,12 +19,15 @@ function qSort(array) {
 
 function createUserTasksPage() {
     let currentUserTasks = JSON.parse(sessionStorage.getItem('user')).tasks
+    const userTasksPage = document.querySelector('.user__tasks-wrapper'),
+        slider = userTasksPage.querySelector('.slider__wrapper'),
+        sliderLeftBtn = userTasksPage.querySelector('.slide-left'),
+        sliderRightBtn = userTasksPage.querySelector('.slide-right'),
+        userTasksCards = userTasksPage.querySelectorAll('.user__task-card')
     if (currentUserTasks.length > 0) {
-
-        const userTasksPage = document.querySelector('.user__tasks-wrapper'),
-            slider = userTasksPage.querySelector('.slider__wrapper')
-
         slider.innerHTML = ''
+        sliderLeftBtn.style.display = 'block'
+        sliderRightBtn.style.display = 'block'
 
         function CreateUserTasks(cardObject) {
             this.id = cardObject.taskId
@@ -72,9 +75,7 @@ function createUserTasksPage() {
         }, 300)
 
         function enableSlider() {
-            const sliderLeftBtn = userTasksPage.querySelector('.slide-left'),
-                sliderRightBtn = userTasksPage.querySelector('.slide-right'),
-                userTasksCards = userTasksPage.querySelectorAll('.user__task-card')
+
             let commonCardWidth = (parseFloat(userTasksCards[0].clientWidth) + 50) / 1.15
             let translateNum = 0
             let indexActive = translateNum / commonCardWidth
@@ -112,7 +113,6 @@ function createUserTasksPage() {
 
         slider.addEventListener('click', (e) => {
             if (e.target.classList.contains('user__task-btn')) {
-                console.log(e.target)
                 const currentParent = e.target.parentNode
                 currentParent.style.opacity = '0'
 
@@ -138,6 +138,10 @@ function createUserTasksPage() {
                 }, 500)
             }
         })
+    } else {
+        sliderLeftBtn.style.display = 'none'
+        sliderRightBtn.style.display = 'none'
+        slider.innerHTML = '<h1 class="content-part-title" style="text-shadow: 5px 5px 50px black">У вас ещё нет задач :(</h1>'
     }
 }
 
@@ -149,6 +153,7 @@ function removeUserTask(taskNumber) {
         const taskIndex = userTaskList.indexOf(taskNumber)
         userTaskList.splice(taskIndex, 1)
         currentUser.tasks = userTaskList
+        currentUser.points += 1
         sessionStorage.setItem(`user`, JSON.stringify(currentUser))
         localStorage.setItem(`${currentUser.id}`, JSON.stringify(currentUser))
     }
@@ -160,8 +165,10 @@ function removeUserTask(taskNumber) {
             currentTaskNumber = Number(taskNumber.slice(13, taskNumber.length).trim())
         let cardIsTaken = currentUser.tasks.includes(currentTaskNumber)
         if (cardIsTaken) {
-            console.log(card)
+            changeCardColor(card, false)
+        } else {
             changeCardColor(card, true)
         }
     }
+    addTaskToCard()
 }

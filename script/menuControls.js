@@ -1,12 +1,11 @@
 const controlItems = document.querySelectorAll('.controls-item'),
-    cardsTitle = document.querySelector('.cards-title'),
-    cardsWrapper = document.querySelector('.cards-wrapper'),
+    cardsTitle = document.querySelector('.main-info-title'),
+    cardsWrapper = document.querySelector('.main-info-wrapper'),
     menuItems = document.querySelectorAll('.menu__item'),
     mainContent = document.querySelector('.main-content > main'),
     navLogo = document.querySelector('.logo'),
     accountContent = document.querySelector('.account-content > main'),
     contentSections = document.querySelectorAll('.content__wrapper > section')
-
 
 
 function getRandomArbitrary(min, max) {
@@ -42,21 +41,37 @@ function createCardNode(cardData) {
     return card
 }
 
+let cardsLoaded = false;
 
 // Nav items add and remove class active
 menuItems.forEach((item, index) => {
-
-    // item[1].classList.add('active')
     item.addEventListener('click', () => {
 
         document.querySelector('body').style.overflowY = 'hidden'
+
         for (let i = 0; i < menuItems.length; i++) {
             if (i !== index) {
                 menuItems[i].classList.remove('active')
             }
         }
+        item.classList.add('active')
+        cardsWrapper.innerHTML = allShowedCardsNode
+        for (let i = 0; i < controlItems.length; i++) {
+            if (i !== 1) {
+                controlItems[i].classList.remove('active')
+            }
+        }
+        addTaskToCard()
+
         if (!checkUserLogged()) {
             menuItems[0].classList.add('active')
+            controlItems[1].classList.add('active')
+
+            for (let i = 0; i < menuItems.length; i++) {
+                if (i !== 0) {
+                    menuItems[i].classList.remove('active')
+                }
+            }
         }
         let transformLength = (index + 1) * 100
         if (checkUserLogged()) {
@@ -76,13 +91,13 @@ menuItems.forEach((item, index) => {
             controlAccountPage()
             contentSections[1].style.transform = `translateX(-100%)`
         }
-
     })
 })
 
+
 // Nav logo restore default page
 function restoreDefaultPage() {
-    document.querySelector('body').style.overflowY = 'auto'
+    document.querySelector('body').style.overflowY = 'initial'
     contentSections[0].style.transform = `translateX(0)`
     contentSections[1].style.transform = `translateX(-200%)`
     contentSections[2].style.transform = `translateX(-300%)`
@@ -99,16 +114,49 @@ navLogo.addEventListener('click', () => {
     restoreDefaultPage()
 })
 
+const dashboardContent = `
+<div class="dashboard-content">
+            <p class="main-info-text">
+              Данное приложение является игровой платформой.<br>
+              Авторизованные пользователи получают расширенный функционал.<br>
+              На данной странице можно наблюдать сводку, задачи и список лидеров.
+            </p>
+            <ul class="actions">
+              <span class="actions-title">NAV-MENU</span>
+              <li class="actions-item"><b><span>JS</span></b> для вовзрата на стартовую страницу</li>
+              <li class="actions-item"><b><span>ACCOUNT</span></b> для входа и регистрации</li>
+              <li class="actions-item"><b><span>TASKS</span></b> для просмотра и выполнения задач</li>
+            </ul>
+          </div>`
+
 // control which info will show on page with from dashboard/task/history/leaderboard
-controlItems.forEach((item, i) => {
-    item.addEventListener('click', () => {
-        item.classList.add('active')
-        cardsTitle.innerHTML = item.innerHTML
-        // drawCards(i)
-        for (let x = 0; x < controlItems.length; x++) {
-            if (x !== i) {
-                controlItems[x].classList.remove('active')
-            }
+function menuControlFunction() {
+    controlItems.forEach((item, i) => {
+        if (cardsLoaded) {
+            const taskList = cardsWrapper.innerHTML
+            item.addEventListener('click', () => {
+                item.classList.add('active')
+                cardsTitle.innerHTML = item.innerHTML
+                for (let x = 0; x < controlItems.length; x++) {
+                    if (x !== i) {
+                        controlItems[x].classList.remove('active')
+                    }
+                }
+
+                if (i === 0) {
+                    cardsWrapper.innerHTML = dashboardContent
+                }
+                if (i === 1) {
+                    cardsWrapper.innerHTML = allShowedCardsNode
+                    addTaskToCard()
+                }
+
+                if (i === 2) {
+                    cardsWrapper.innerHTML = ''
+                    appendLeaderboardItems()
+                }
+            })
         }
     })
-})
+}
+
