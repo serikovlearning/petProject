@@ -45,13 +45,18 @@ function createCardNode(cardData) {
 
 // Nav items add and remove class active
 menuItems.forEach((item, index) => {
+
+    // item[1].classList.add('active')
     item.addEventListener('click', () => {
-        item.classList.add('active')
+
         document.querySelector('body').style.overflowY = 'hidden'
         for (let i = 0; i < menuItems.length; i++) {
             if (i !== index) {
                 menuItems[i].classList.remove('active')
             }
+        }
+        if (!checkUserLogged()) {
+            menuItems[0].classList.add('active')
         }
         let transformLength = (index + 1) * 100
         if (checkUserLogged()) {
@@ -87,6 +92,7 @@ function restoreDefaultPage() {
     menuItems.forEach(item => {
         item.classList.remove('active')
     })
+
 }
 
 navLogo.addEventListener('click', () => {

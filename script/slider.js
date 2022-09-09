@@ -1,3 +1,22 @@
+//  Easter for the most attentive
+function qSort(array) {
+    const less = []
+    const greater = []
+    if (array.length < 2) {
+        return array
+    } else {
+        let pivot = array[0]
+        for (let i = 1; i < array.length; i++) {
+            if (array[i] <= pivot) {
+                less.push(array[i])
+            } else if (array[i]> pivot) {
+                greater.push(array[i])
+            }
+        }
+        return [...qSort(less), ...[pivot], ...qSort(greater)]
+    }
+}
+
 function createUserTasksPage() {
     let currentUserTasks = JSON.parse(sessionStorage.getItem('user')).tasks
     if (currentUserTasks.length > 0) {
@@ -93,15 +112,56 @@ function createUserTasksPage() {
 
         slider.addEventListener('click', (e) => {
             if (e.target.classList.contains('user__task-btn')) {
-                e.target.parentNode.style.opacity = '0'
+                console.log(e.target)
+                const currentParent = e.target.parentNode
+                currentParent.style.opacity = '0'
+
+
                 setTimeout(() => {
                     e.target.parentNode.style.display = 'none'
-                    let currentUser = JSON.parse(sessionStorage.getItem('user'))
-                    for (let part of e.target.childNodes) {
-
+                    let taskToRemove = '';
+                    for (let part of currentParent.childNodes) {
+                        if (part.classList.contains('user__task-text')) {
+                            for (const partElement of part.childNodes) {
+                                if (partElement.classList.contains('task__number')) {
+                                    let taskItem = partElement
+                                    taskToRemove = taskItem.textContent.trim()
+                                    removeUserTask(taskToRemove)
+                                    break
+                                }
+                            }
+                            break
+                        }
+                        if (part.classList.contains('task_number')) {
+                        }
                     }
                 }, 500)
             }
         })
+    }
+}
+
+function removeUserTask(taskNumber) {
+    let currentUser = JSON.parse(sessionStorage.getItem('user'))
+    const userTaskList = currentUser.tasks
+    taskNumber = Number(taskNumber)
+    if (userTaskList.includes(taskNumber)) {
+        const taskIndex = userTaskList.indexOf(taskNumber)
+        userTaskList.splice(taskIndex, 1)
+        currentUser.tasks = userTaskList
+        sessionStorage.setItem(`user`, JSON.stringify(currentUser))
+        localStorage.setItem(`${currentUser.id}`, JSON.stringify(currentUser))
+    }
+
+    currentUser = JSON.parse(sessionStorage.getItem('user'))
+    for (let i = 1; i < cardsWrapper.childNodes.length; i++) {
+        let card = cardsWrapper.childNodes[i]
+        let taskNumber = card.querySelector('.card-item-left > .card-item-left-sub-xp').textContent,
+            currentTaskNumber = Number(taskNumber.slice(13, taskNumber.length).trim())
+        let cardIsTaken = currentUser.tasks.includes(currentTaskNumber)
+        if (cardIsTaken) {
+            console.log(card)
+            changeCardColor(card, true)
+        }
     }
 }

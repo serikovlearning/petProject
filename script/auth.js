@@ -21,7 +21,6 @@ const restorePage = hiddenPage => {
             hiddenPage.style.opacity = '1'
         }, 100)
     }
-
 }
 
 const showAndHidePage = (showPage, hidePage) => {
