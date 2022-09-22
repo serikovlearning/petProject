@@ -22,8 +22,9 @@ function createUserTasksPage() {
     const userTasksPage = document.querySelector('.user__tasks-wrapper'),
         slider = userTasksPage.querySelector('.slider__wrapper'),
         sliderLeftBtn = userTasksPage.querySelector('.slide-left'),
-        sliderRightBtn = userTasksPage.querySelector('.slide-right'),
-        userTasksCards = userTasksPage.querySelectorAll('.user__task-card')
+        sliderRightBtn = userTasksPage.querySelector('.slide-right')
+
+    let userTasksCards = userTasksPage.querySelectorAll('.user__task-card')
     if (currentUserTasks.length > 0) {
         slider.innerHTML = ''
         sliderLeftBtn.style.display = 'block'
@@ -75,6 +76,8 @@ function createUserTasksPage() {
         }, 300)
 
         function enableSlider() {
+            userTasksCards = userTasksPage.querySelectorAll('.user__task-card')
+            console.log(userTasksCards[0])
 
             let commonCardWidth = (parseFloat(userTasksCards[0].clientWidth) + 50) / 1.15
             let translateNum = 0
@@ -115,8 +118,7 @@ function createUserTasksPage() {
             if (e.target.classList.contains('user__task-btn')) {
                 const currentParent = e.target.parentNode
                 currentParent.style.opacity = '0'
-
-
+                console.log(userTasksCards.length)
                 setTimeout(() => {
                     e.target.parentNode.style.display = 'none'
                     let taskToRemove = '';
@@ -135,7 +137,17 @@ function createUserTasksPage() {
                         if (part.classList.contains('task_number')) {
                         }
                     }
+
                 }, 500)
+                currentParent.remove()
+                userTasksCards = userTasksPage.querySelectorAll('.user__task-card')
+                if (userTasksCards.length === 0) {
+                    sliderLeftBtn.style.display = 'none'
+                    sliderRightBtn.style.display = 'none'
+                    slider.innerHTML = '<h1 class="content-part-title" style="text-shadow: 5px 5px 50px black">У вас ещё нет задач :(</h1>'
+                } else {
+                    userTasksCards[0].classList.add('active')
+                }
             }
         })
     } else {

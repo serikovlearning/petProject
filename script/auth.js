@@ -166,7 +166,6 @@ loginBtn.addEventListener('click', () => {
         changeUserData(checkThisUser)
         controlAccountPage()
         addTaskToCard()
-        createUserTasksPage()
     } else {
         loginInputs[0].value = ''
         loginInputs[1].value = ''

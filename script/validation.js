@@ -35,11 +35,16 @@ const randomUser5 = new CreateUser('serikovlearning', 'secret', 'Сериков 
 randomUser5.points = getRandomArbitrary(20, 100)
 
 addedUsers.push(randomUser1, randomUser2, randomUser3, randomUser4, randomUser5)
-addedUsers.forEach((user, index) => {
+addedUsers.map(user => {
     if (localStorage.length <= 5) {
         localStorage.setItem(`${localStorage.length++}`, JSON.stringify(user))
     }
 })
+// addedUsers.forEach((user, index) => {
+//     if (localStorage.length <= 5) {
+//         localStorage.setItem(`${localStorage.length++}`, JSON.stringify(user))
+//     }
+// })
 
 let textUsername = labels[0].innerHTML,
     textTel = labels[3].innerHTML,
